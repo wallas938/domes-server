@@ -29,5 +29,5 @@ public class Animal {
     @Column
     private double price;
     @Column
-    private int quantity;
+    private int age;
 }

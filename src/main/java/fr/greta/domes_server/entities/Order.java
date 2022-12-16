@@ -25,4 +25,6 @@ public class Order {
     private Client client;
     @Column
     private String shippingAddress;
+    @Column
+    private double total;
 }
