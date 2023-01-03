@@ -7,5 +7,5 @@ import java.util.Collection;
 public interface AnimalService {
     void addAnimal(Animal animal);
     Animal getAnimal(String uuid);
-    Collection<Animal> getAnimals();
+    Collection<Animal> getAll();
 }
