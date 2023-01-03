@@ -16,7 +16,7 @@ public class AnimalServiceImpl implements AnimalService{
     }
 
     @Override
-    public Collection<Animal> getAnimals() {
+    public Collection<Animal> getAll() {
         return null;
     }
 }
