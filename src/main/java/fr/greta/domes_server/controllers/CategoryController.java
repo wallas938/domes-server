@@ -2,7 +2,6 @@ package fr.greta.domes_server.controllers;
 
 import fr.greta.domes_server.entities.Category;
 import fr.greta.domes_server.services.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

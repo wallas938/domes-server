@@ -17,7 +17,7 @@ public class Specie {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Column(length = 100)
+    @Column(length = 100, nullable = false, unique = true)
     @NotBlank
     private String name;
     @JoinColumn

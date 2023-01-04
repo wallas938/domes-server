@@ -32,6 +32,11 @@ public class SpecieServiceImpl implements SpecieService{
     }
 
     @Override
+    public Specie getSpeciesByName(String specieName) {
+        return specieRepository.getSpeciesByName(specieName);
+    }
+
+    @Override
     public Collection<Specie> getSpeciesByCategoryName(String categoryName) {
         return specieRepository.findByCategoryName(categoryName);
     }
