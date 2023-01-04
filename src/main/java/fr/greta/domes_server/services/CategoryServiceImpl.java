@@ -23,4 +23,8 @@ public class CategoryServiceImpl implements CategoryService{
     public void save(Category category) {
 
     }
+
+    public Category getCategoryByName(String categoryName) {
+        return categoryRepository.getCategoryByName(categoryName);
+    }
 }

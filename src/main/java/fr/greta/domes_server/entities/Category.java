@@ -18,7 +18,7 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Column(length = 25)
+    @Column(length = 25, unique = true, nullable = false)
     @NotBlank
     private String name;
 }

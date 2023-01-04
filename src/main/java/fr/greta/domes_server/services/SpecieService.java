@@ -9,5 +9,6 @@ public interface SpecieService {
     void save(Specie specie);
     Collection<Specie> getAll();
     Collection<Specie> getSpeciesByCategory(String categoryId);
+    Specie getSpeciesByName(String specieName);
     Collection<Specie> getSpeciesByCategoryName(String categoryName);
 }

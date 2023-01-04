@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public interface SpecieRepository extends JpaRepository<Specie, UUID> {
     Collection<Specie> getSpeciesByCategoryId(UUID categoryId);
-
     Collection<Specie> findByCategoryName(String name);
+
+    Specie getSpeciesByName(String specieName);
 }
