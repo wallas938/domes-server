@@ -29,8 +29,8 @@ public class SpecieController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping(params = "categoryId")
-    public ResponseEntity<List<Specie>> getSpeciesByCategory(@RequestParam("categoryId") String categoryId) {
+    @GetMapping(value = "categoryId")
+    public ResponseEntity<List<Specie>> getSpeciesByCategoryId(@RequestParam("categoryId") String categoryId) {
         List<Specie> species = (List<Specie>) specieService.getSpeciesByCategory(categoryId);
         if(species != null) {
             return new ResponseEntity<>(species, HttpStatus.ACCEPTED);
@@ -38,7 +38,7 @@ public class SpecieController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping(params = "categoryName")
+    @GetMapping(value = "categoryName")
     public ResponseEntity<List<Specie>> getSpeciesByCategoryName(@RequestParam("categoryName") String categoryName) {
         List<Specie> species = (List<Specie>) specieService.getSpeciesByCategoryName(categoryName);
         if(species != null) {
