@@ -30,18 +30,36 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public Collection<Animal> getAll() {
-        return animalRepository.findAll();
+    public Collection<Animal> getAnimal() {
+        return null;
     }
 
     @Override
     public AnimalPage getAnimalsBySize(int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         AnimalPage animalPage = new AnimalPage();
-        Page<Animal> content = animalRepository.findAll(pageable);
+        Page<Animal> content = animalRepository.findAll(PageRequest.of(pageNumber, pageSize));
         animalPage.setAnimals(content.getContent());
         animalPage.setTotalPages(content.getTotalPages());
         animalPage.setTotalElements(content.getNumberOfElements());
+        return animalPage;
+    }
+
+    @Override
+    public AnimalPage getAnimals(double minPrice, double maxPrice, int minAge, int maxAge, String categoryName, String specieName, int pageNumber, int pageSize) {
+
+        Page<Animal> page = animalRepository.findAnimalByPriceAndAgeGreaterThanAndCategoryNameEqualsAndSpecieNameEquals(
+                minPrice,
+                maxPrice ,
+                minAge,
+                maxAge,
+                categoryName,
+                specieName,
+                PageRequest.of(pageNumber, pageSize));
+
+        AnimalPage animalPage = new AnimalPage();
+        animalPage.setAnimals(page.getContent());
+        animalPage.setTotalPages(page.getTotalPages());
+        animalPage.setTotalElements(page.getTotalPages());
         return animalPage;
     }
 }

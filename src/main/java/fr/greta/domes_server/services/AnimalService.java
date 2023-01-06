@@ -10,7 +10,8 @@ import java.util.Collection;
 public interface AnimalService {
     void addAnimal(Animal animal);
     Animal getAnimal(String uuid);
-    Collection<Animal> getAll();
+    Collection<Animal> getAnimal();
 
     AnimalPage getAnimalsBySize(int pageSize, int size);
+    AnimalPage getAnimals(double minPrice, double maxPrice, int minAge, int maxAge, String categoryName, String specieName, int pageNumber, int pageSize);
 }
