@@ -1,8 +1,12 @@
 package fr.greta.domes_server.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.UUID;
 @Entity
 @Table(name = "t_animal")
@@ -16,30 +20,30 @@ public class Animal {
     private UUID id;
     @Column
     private String description;
-    @Column(nullable = true)
+    @Column
     private String mainPicture;
-    @Column(nullable = true)
+    @Column
     private String secondPicture;
-    @Column(nullable = true)
+    @Column
     private String thirdPicture;
-    @Column(nullable = true)
+    @Column
     private String fourthPicture;
-    @JoinColumn
+    @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
-    @JoinColumn
+    @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.EAGER)
     private Specie specie;
-    @Column
+    @Column(nullable = false)
+    @DecimalMin(value = "50.00", message = "Min age = 1.0")
     private double price;
-    @Column
+    @Column(nullable = false)
+    @Min(value = 1, message = "Min age = 1")
+    @Max(value = 10, message = "Max age = 10")
     private int age;
-
-    public Animal(String description, Category category, Specie specie, double price, int age) {
-        this.description = description;
-        this.category = category;
-        this.specie = specie;
-        this.price = price;
-        this.age = age;
-    }
+    @Column
+    private boolean sold;
+    @Column
+    @Temporal(TemporalType.DATE)
+    private LocalDate registrationDate = LocalDate.now();
 }

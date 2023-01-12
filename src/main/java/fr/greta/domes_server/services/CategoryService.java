@@ -6,5 +6,4 @@ import java.util.Collection;
 
 public interface CategoryService {
     Collection<Category> getAll();
-    void save(Category category);
 }

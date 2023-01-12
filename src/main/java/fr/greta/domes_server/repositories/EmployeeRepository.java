@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
-    public Employee findByFirstname(String name);
+    Employee findByFirstname(String name);
 
     // Find employees by their names and by size for pagination
-    public Page findByFirstnameContaining(String name, Pageable pageable);
+    Page<Employee> findByFirstnameContaining(String name, Pageable pageable);
 }

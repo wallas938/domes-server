@@ -1,15 +1,13 @@
 package fr.greta.domes_server.controllers;
 
+import fr.greta.domes_server.dtos.animal.AnimalCreateDto;
 import fr.greta.domes_server.dtos.animal.AnimalPage;
-import fr.greta.domes_server.entities.Animal;
-import fr.greta.domes_server.entities.Category;
+import fr.greta.domes_server.entities.DomesResponse;
 import fr.greta.domes_server.services.AnimalService;
-import fr.greta.domes_server.services.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -25,10 +23,10 @@ public class AnimalController {
     public ResponseEntity<AnimalPage> getAnimals(
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "15") int pageSize,
-            @RequestParam(defaultValue = "0") double minPrice,
+            @RequestParam(defaultValue = "50") double minPrice,
             @RequestParam(defaultValue = "9999") double maxPrice,
-            @RequestParam(defaultValue = "0") int minAge,
-            @RequestParam(defaultValue = "100") int maxAge,
+            @RequestParam(defaultValue = "1") int minAge,
+            @RequestParam(defaultValue = "10") int maxAge,
             @RequestParam(defaultValue = "%") String categoryName,
             @RequestParam(defaultValue = "%") String specieName) {
 //        System.out.println(String.format("/search: minPrice:%s - maxPrice=%s - minAge=%s - maxAge=%s - categoryName=%s - specieName=%s - pageNumber=%s - pageSize=%s" , minPrice, maxPrice, minAge, maxAge, categoryName, specieName, pageNumber, pageSize));
@@ -47,5 +45,15 @@ public class AnimalController {
             return new ResponseEntity<>(animalPage, HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping()
+    public ResponseEntity<String> postAnimal(@RequestBody @Valid AnimalCreateDto dto) {
+        System.out.println(dto);
+        DomesResponse response = animalService.addAnimal(dto);
+        if(response.getSuccess())
+            return new ResponseEntity<>(response.getMessage(), HttpStatus.CREATED);
+
+        return new ResponseEntity<>(response.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
