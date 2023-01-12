@@ -1,6 +1,5 @@
 package fr.greta.domes_server.entities;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;

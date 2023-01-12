@@ -1,37 +1,64 @@
 package fr.greta.domes_server.services;
 
+import fr.greta.domes_server.dtos.animal.AnimalCreateDto;
 import fr.greta.domes_server.dtos.animal.AnimalPage;
 import fr.greta.domes_server.entities.Animal;
+import fr.greta.domes_server.entities.Category;
+import fr.greta.domes_server.entities.DomesResponse;
+import fr.greta.domes_server.entities.Specie;
 import fr.greta.domes_server.repositories.AnimalRepository;
+import fr.greta.domes_server.repositories.CategoryRepository;
+import fr.greta.domes_server.repositories.SpecieRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
 
 @Service
 public class AnimalServiceImpl implements AnimalService {
 
     private final AnimalRepository animalRepository;
+    private final CategoryRepository categoryRepository;
+    private final SpecieRepository specieRepository;
 
-    public AnimalServiceImpl(AnimalRepository animalRepository) {
+    public AnimalServiceImpl(AnimalRepository animalRepository, CategoryRepository categoryRepository, SpecieRepository specieRepository) {
         this.animalRepository = animalRepository;
+        this.categoryRepository = categoryRepository;
+        this.specieRepository = specieRepository;
     }
 
 
     @Override
-    public void addAnimal(Animal animal) {
-    }
+    public DomesResponse addAnimal(AnimalCreateDto animalCreateDto) {
+        try {
 
-    @Override
-    public Animal getAnimal(String uuid) {
-        return null;
-    }
+            Category category = categoryRepository.getCategoryByName(animalCreateDto.getCategory());
 
-    @Override
-    public Collection<Animal> getAnimal() {
-        return null;
+            Specie specie = specieRepository.getSpeciesByName(animalCreateDto.getSpecie());
+
+            if (category == null)
+                return new DomesResponse("Catégorie null", false);
+
+            if (specie == null)
+                return new DomesResponse("Espece null", false);
+
+            Animal animal = new Animal();
+            animal.setAge(animalCreateDto.getAge());
+            animal.setPrice(animalCreateDto.getPrice());
+            animal.setCategory(category);
+            animal.setSpecie(specie);
+            animal.setMainPicture(animalCreateDto.getMainPicture());
+            animal.setMainPicture(animalCreateDto.getMainPicture());
+            animal.setSecondPicture(animalCreateDto.getSecondPicture());
+            animal.setThirdPicture(animalCreateDto.getThirdPicture());
+            animal.setFourthPicture(animalCreateDto.getFourthPicture());
+            animal.setSold(false);
+
+            animalRepository.save(animal);
+
+            return new DomesResponse("Animal enregistré", true);
+        } catch (Exception e) {
+            return new DomesResponse("Erreur Serveur" + e.getMessage(), true);
+        }
     }
 
     @Override
@@ -49,7 +76,7 @@ public class AnimalServiceImpl implements AnimalService {
 
         Page<Animal> page = animalRepository.findAnimalByPriceAndAgeGreaterThanAndCategoryNameEqualsAndSpecieNameEquals(
                 minPrice,
-                maxPrice ,
+                maxPrice,
                 minAge,
                 maxAge,
                 categoryName,
