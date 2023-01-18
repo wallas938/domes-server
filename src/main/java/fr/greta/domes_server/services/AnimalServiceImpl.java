@@ -1,6 +1,7 @@
 package fr.greta.domes_server.services;
 
 import fr.greta.domes_server.dtos.animal.AnimalCreateDto;
+import fr.greta.domes_server.dtos.animal.AnimalEditDTO;
 import fr.greta.domes_server.dtos.animal.AnimalPage;
 import fr.greta.domes_server.entities.Animal;
 import fr.greta.domes_server.entities.Category;
@@ -12,6 +13,8 @@ import fr.greta.domes_server.repositories.SpecieRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AnimalServiceImpl implements AnimalService {
@@ -88,5 +91,39 @@ public class AnimalServiceImpl implements AnimalService {
         animalPage.setTotalPages(page.getTotalPages());
         animalPage.setTotalElements(page.getTotalPages());
         return animalPage;
+    }
+
+    @Override
+    public Animal editAnimal(AnimalEditDTO dto) {
+
+        try {
+
+            Category category = categoryRepository.getCategoryByName(dto.getCategory());
+
+            Specie specie = specieRepository.getSpeciesByName(dto.getSpecie());
+
+            if (category == null)
+                return null;
+
+            if (specie == null)
+                return null;
+
+            Optional<Animal> animal = animalRepository.findById(dto.getId());
+
+            animal.get().setAge(dto.getAge());
+            animal.get().setPrice(dto.getPrice());
+            animal.get().setCategory(category);
+            animal.get().setSpecie(specie);
+            animal.get().setDescription(dto.getDescription());
+            animal.get().setMainPicture(dto.getMainPicture());
+            animal.get().setMainPicture(dto.getMainPicture());
+            animal.get().setSecondPicture(dto.getSecondPicture());
+            animal.get().setThirdPicture(dto.getThirdPicture());
+            animal.get().setFourthPicture(dto.getFourthPicture());
+
+            return animalRepository.save(animal.get());
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

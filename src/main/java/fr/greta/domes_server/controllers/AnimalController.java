@@ -1,7 +1,9 @@
 package fr.greta.domes_server.controllers;
 
+import fr.greta.domes_server.dtos.animal.AnimalEditDTO;
 import fr.greta.domes_server.dtos.animal.AnimalCreateDto;
 import fr.greta.domes_server.dtos.animal.AnimalPage;
+import fr.greta.domes_server.entities.Animal;
 import fr.greta.domes_server.entities.DomesResponse;
 import fr.greta.domes_server.services.AnimalService;
 import jakarta.validation.Valid;
@@ -51,9 +53,20 @@ public class AnimalController {
     public ResponseEntity<String> postAnimal(@RequestBody @Valid AnimalCreateDto dto) {
         System.out.println(dto);
         DomesResponse response = animalService.addAnimal(dto);
-        if(response.getSuccess())
+        if (response.getSuccess())
             return new ResponseEntity<>(response.getMessage(), HttpStatus.CREATED);
 
         return new ResponseEntity<>(response.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("/{animalId}")
+    public ResponseEntity<Animal> postAnimal(@RequestBody @Valid AnimalEditDTO dto, @PathVariable String animalId) {
+
+        Animal animal = animalService.editAnimal(dto);
+
+        if (animal != null)
+            return new ResponseEntity<>(animal, HttpStatus.CREATED);
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
