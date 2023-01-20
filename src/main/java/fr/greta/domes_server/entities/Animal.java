@@ -12,6 +12,7 @@ import java.util.UUID;
 @Table(name = "t_animal")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @EqualsAndHashCode
 public class Animal {
@@ -46,4 +47,12 @@ public class Animal {
     @Column
     @Temporal(TemporalType.DATE)
     private LocalDate registrationDate = LocalDate.now();
+
+    public Animal(String description, Category category, Specie specie, double price, int age) {
+        this.description = description;
+        this.category = category;
+        this.specie = specie;
+        this.price = price;
+        this.age = age;
+    }
 }
