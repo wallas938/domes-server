@@ -15,12 +15,10 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Column(length = 55)
+    @Column(length = 100)
     private String lastname;
-    @Column(length = 55)
+    @Column(length = 100)
     private String firstname;
     @Column(length = 100)
     private String email;
-    @Column
-    private String address;
 }

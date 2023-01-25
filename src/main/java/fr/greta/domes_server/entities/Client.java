@@ -3,7 +3,6 @@ package fr.greta.domes_server.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Collection;
 import java.util.UUID;
 
 @Entity
@@ -18,14 +17,12 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Column
+    @Column(length = 100)
     private String lastname;
-    @Column
+    @Column(length = 100)
     private String firstname;
-    @Column
+    @Column(length = 10)
     private String telephone;
-    @Column
+    @Column(length = 100)
     private String address;
-    @OneToMany(mappedBy = "client")
-    private Collection<Order> orders;
 }
