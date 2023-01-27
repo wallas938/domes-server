@@ -16,12 +16,11 @@ import java.util.UUID;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-    @Column
-    private String reference;
-    @OneToMany
-    private Collection<Animal> animals;
-    @ManyToOne
+    private UUID reference;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "t_orders_articles")
+    private Collection<Article> articles;
+    @ManyToOne(fetch = FetchType.EAGER)
     private Client client;
     @Column
     private String shippingAddress;

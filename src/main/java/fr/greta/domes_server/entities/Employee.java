@@ -21,4 +21,6 @@ public class Employee {
     private String firstname;
     @Column(length = 100)
     private String email;
+    @Column
+    private String password;
 }
