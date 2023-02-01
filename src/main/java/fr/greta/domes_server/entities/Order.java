@@ -3,6 +3,7 @@ package fr.greta.domes_server.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -26,4 +27,7 @@ public class Order {
     private String shippingAddress;
     @Column
     private double total;
+    @Column
+    @Temporal(TemporalType.DATE)
+    private LocalDate purchaseDate = LocalDate.now();
 }

@@ -2,18 +2,15 @@ package fr.greta.domes_server;
 
 import fr.greta.domes_server.entities.Animal;
 import fr.greta.domes_server.entities.Category;
+import fr.greta.domes_server.entities.Client;
 import fr.greta.domes_server.entities.Specie;
-import fr.greta.domes_server.repositories.AnimalRepository;
-import fr.greta.domes_server.repositories.CategoryRepository;
-import fr.greta.domes_server.repositories.EmployeeRepository;
-import fr.greta.domes_server.repositories.SpecieRepository;
+import fr.greta.domes_server.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class DomesServerApplication implements CommandLineRunner {
@@ -21,12 +18,15 @@ public class DomesServerApplication implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final SpecieRepository specieRepository;
     private final AnimalRepository animalRepository;
+    private final ClientRepository clientRepository;
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public DomesServerApplication(EmployeeRepository employeeRepository, CategoryRepository categoryRepository, SpecieRepository specieRepository, AnimalRepository animalRepository) {
+    public DomesServerApplication(EmployeeRepository employeeRepository, CategoryRepository categoryRepository, SpecieRepository specieRepository, AnimalRepository animalRepository, ClientRepository clientRepository) {
         this.employeeRepository = employeeRepository;
         this.categoryRepository = categoryRepository;
         this.specieRepository = specieRepository;
         this.animalRepository = animalRepository;
+        this.clientRepository = clientRepository;
     }
 
     public static void main(String[] args) {
@@ -35,8 +35,8 @@ public class DomesServerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        initAnimalsCategoriesAndSpecies();
-
+//        initAnimalsCategoriesAndSpecies();
+//        initClients();
 //        employeeRepository.save(new Employee(null, "Dramé","Sissako", "sissako@email.com", "3 place charles munch"));
 //        employeeRepository.save(new Employee(null, "Toure","Mamadou", "mamadou@email.com", "3 place charles munch"));
 //        employeeRepository.save(new Employee(null, "Goita","Asimi", "asimi@email.com", "3 place charles munch"));
@@ -66,7 +66,7 @@ public class DomesServerApplication implements CommandLineRunner {
     }
 
     private void initAnimalsCategoriesAndSpecies() {
-/*
+
         Category dog = categoryRepository.save(new Category(null, "CHIEN"));
         Category cat = categoryRepository.save(new Category(null, "CHAT"));
         Category bird = categoryRepository.save(new Category(null, "OISEAU"));
@@ -456,7 +456,15 @@ public class DomesServerApplication implements CommandLineRunner {
         for (int i = 1; i <= 5; i++) {
             animalRepository.save(new Animal("Animal " + (i + 1), reptile, basilicVert, i * 50, i + 1));
         }
-*/
+    }
+
+    private void initClients() {
+
+        clientRepository.save(new Client("Dramé", "Sissako", "0102350221","3 place Charles " , "sissako@email.fr", encoder.encode("sissako")));
+        clientRepository.save(new Client("Goita", "Asimi", "0102350221","3 place Charles " , "asimi@email.fr", encoder.encode("asimi")));
+        clientRepository.save(new Client("Jakarta", "ariful", "0102350221","3 place Charles " , "ariful@email.fr", encoder.encode("ariful")));
+        clientRepository.save(new Client("Petit", "Jessie", "0102350221","3 place Charles " , "jessie@email.fr", encoder.encode("jessie")));
+        clientRepository.save(new Client("Simo", "Philippe", "0102350221","3 place Charles " , "philippe@email.fr", encoder.encode("philippe")));
     }
 
 }
