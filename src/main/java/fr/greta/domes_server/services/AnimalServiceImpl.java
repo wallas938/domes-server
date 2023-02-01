@@ -89,7 +89,7 @@ public class AnimalServiceImpl implements AnimalService {
         AnimalPage animalPage = new AnimalPage();
         animalPage.setAnimals(page.getContent());
         animalPage.setTotalPages(page.getTotalPages());
-        animalPage.setTotalElements(page.getTotalPages());
+        animalPage.setTotalElements((int) page.getTotalElements());
         return animalPage;
     }
 
