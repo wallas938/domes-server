@@ -23,8 +23,10 @@ public class Order {
     private Collection<Article> articles;
     @ManyToOne(fetch = FetchType.EAGER)
     private Client client;
+    @Embedded
+    private Address shippingAddress;
     @Column
-    private String shippingAddress;
+    private int numberOfArticles;
     @Column
     private double total;
     @Column

@@ -1,15 +1,11 @@
 package fr.greta.domes_server;
 
-import fr.greta.domes_server.entities.Animal;
-import fr.greta.domes_server.entities.Category;
-import fr.greta.domes_server.entities.Client;
-import fr.greta.domes_server.entities.Specie;
+import fr.greta.domes_server.entities.*;
 import fr.greta.domes_server.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
@@ -36,7 +32,7 @@ public class DomesServerApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
 //        initAnimalsCategoriesAndSpecies();
-//        initClients();
+        initClients();
 //        employeeRepository.save(new Employee(null, "Dramé","Sissako", "sissako@email.com", "3 place charles munch"));
 //        employeeRepository.save(new Employee(null, "Toure","Mamadou", "mamadou@email.com", "3 place charles munch"));
 //        employeeRepository.save(new Employee(null, "Goita","Asimi", "asimi@email.com", "3 place charles munch"));
@@ -460,11 +456,11 @@ public class DomesServerApplication implements CommandLineRunner {
 
     private void initClients() {
 
-        clientRepository.save(new Client("Dramé", "Sissako", "0102350221","3 place Charles " , "sissako@email.fr", encoder.encode("sissako")));
-        clientRepository.save(new Client("Goita", "Asimi", "0102350221","3 place Charles " , "asimi@email.fr", encoder.encode("asimi")));
-        clientRepository.save(new Client("Jakarta", "ariful", "0102350221","3 place Charles " , "ariful@email.fr", encoder.encode("ariful")));
-        clientRepository.save(new Client("Petit", "Jessie", "0102350221","3 place Charles " , "jessie@email.fr", encoder.encode("jessie")));
-        clientRepository.save(new Client("Simo", "Philippe", "0102350221","3 place Charles " , "philippe@email.fr", encoder.encode("philippe")));
+        clientRepository.save(new Client("Dramé", "Sissako", "0678942155", new Address("france", "lile", "3 rue du petit lion", "59130"), "sissako@email.fr", encoder.encode("sissako")));
+        clientRepository.save(new Client("Goita", "Asimi", "0741893026",new Address("france", "paris", "6 avenue des marchands de sable", "59130") , "asimi@email.fr", encoder.encode("asimi")));
+        clientRepository.save(new Client("Jakarta", "ariful", "0648799935",new Address("france", "bordeaux", "32 rue du chemin des vivants", "33000") , "ariful@email.fr", encoder.encode("ariful")));
+        clientRepository.save(new Client("Petit", "Jessie", "0713416885",new Address("france", "lyon", "71 boulevard du zenith", "69001") , "jessie@email.fr", encoder.encode("jessie")));
+        clientRepository.save(new Client("Simo", "Philippe", "0698633846",new Address("france", "marseille", "10 place du zinedine zidane", "13007") , "philippe@email.fr", encoder.encode("philippe")));
     }
 
 }

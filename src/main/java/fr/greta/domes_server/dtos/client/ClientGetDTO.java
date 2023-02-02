@@ -1,7 +1,7 @@
 package fr.greta.domes_server.dtos.client;
 
+import fr.greta.domes_server.entities.Address;
 import fr.greta.domes_server.entities.Order;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -18,7 +18,7 @@ public class ClientGetDTO {
     private String lastname;
     private String firstname;
     private String phoneNumber;
-    private String address;
+    private Address address;
     private String email;
     private Collection<Order> orders;
     private LocalDate registrationDate = LocalDate.now();

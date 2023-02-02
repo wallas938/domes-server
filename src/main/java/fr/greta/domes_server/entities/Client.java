@@ -1,7 +1,5 @@
 package fr.greta.domes_server.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,8 +24,8 @@ public class Client {
     private String firstname;
     @Column(length = 10)
     private String phoneNumber;
-    @Column(length = 100)
-    private String address;
+    @Embedded
+    private Address address;
     @Column(length = 100)
     private String email;
     @Column
@@ -39,7 +37,7 @@ public class Client {
     @Temporal(TemporalType.DATE)
     private LocalDate registrationDate = LocalDate.now();
 
-    public Client(String lastname, String firstname, String telephone, String address, String email, String password) {
+    public Client(String lastname, String firstname, String telephone, Address address, String email, String password) {
         this.lastname = lastname;
         this.firstname = firstname;
         this.phoneNumber = telephone;
