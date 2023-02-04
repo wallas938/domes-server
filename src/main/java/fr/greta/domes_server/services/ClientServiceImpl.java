@@ -2,6 +2,7 @@ package fr.greta.domes_server.services;
 
 import fr.greta.domes_server.dtos.client.ClientGetDTO;
 import fr.greta.domes_server.dtos.client.ClientPage;
+import fr.greta.domes_server.dtos.order.OrderGetDTO;
 import fr.greta.domes_server.entities.Client;
 import fr.greta.domes_server.entities.Order;
 import fr.greta.domes_server.repositories.ClientRepository;
@@ -51,8 +52,22 @@ public class ClientServiceImpl implements ClientService {
             clientGetDTO.setPhoneNumber(client.getPhoneNumber());
             clientGetDTO.setRegistrationDate(client.getRegistrationDate());
             clientGetDTO.setEmail(client.getEmail());
+            Order lastOrder = orderRepository.findFirstByClientId(client.getId());
+            if(lastOrder != null)
+                clientGetDTO.setLastOrder(generateOrderGetDTO(lastOrder));
             return clientGetDTO;
         }).toList();
+    }
+    
+    private OrderGetDTO generateOrderGetDTO(Order order) {
+        OrderGetDTO orderGetDTO = new OrderGetDTO();
+        orderGetDTO.setArticles(order.getArticles());
+        orderGetDTO.setTotal(order.getTotal());
+        orderGetDTO.setId(order.getId());
+        orderGetDTO.setPurchaseDate(order.getPurchaseDate());
+        orderGetDTO.setShippingAddress(order.getShippingAddress());
+        orderGetDTO.setNumberOfArticles(order.getNumberOfArticles());
+        return orderGetDTO;
     }
 
 
