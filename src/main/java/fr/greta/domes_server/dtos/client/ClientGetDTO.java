@@ -8,11 +8,10 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode
 public class ClientGetDTO {
     private UUID id;
     private String lastname;
@@ -20,6 +19,5 @@ public class ClientGetDTO {
     private String phoneNumber;
     private Address address;
     private String email;
-    private Collection<Order> orders;
     private LocalDate registrationDate = LocalDate.now();
 }

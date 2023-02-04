@@ -8,11 +8,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "t_specie")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode
 public class Specie {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

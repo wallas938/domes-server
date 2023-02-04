@@ -22,4 +22,6 @@ public interface ClientRepository extends JpaRepository<Client, UUID> {
             @Param("phoneNumber") String phoneNumber,
             @Param("email") String email,
             Pageable pageable);
+
+    Client findByFirstname(String firstname);
 }
