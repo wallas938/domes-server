@@ -8,6 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.List;
+
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class DomesServerApplication implements CommandLineRunner {
     private final EmployeeRepository employeeRepository;
@@ -15,14 +17,19 @@ public class DomesServerApplication implements CommandLineRunner {
     private final SpecieRepository specieRepository;
     private final AnimalRepository animalRepository;
     private final ClientRepository clientRepository;
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private final ArticleRepository articleRepository;
+    private final OrderRepository orderRepository;
 
-    public DomesServerApplication(EmployeeRepository employeeRepository, CategoryRepository categoryRepository, SpecieRepository specieRepository, AnimalRepository animalRepository, ClientRepository clientRepository) {
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+    public DomesServerApplication(EmployeeRepository employeeRepository, CategoryRepository categoryRepository, SpecieRepository specieRepository, AnimalRepository animalRepository, ClientRepository clientRepository, ArticleRepository articleRepository, OrderRepository orderRepository) {
         this.employeeRepository = employeeRepository;
         this.categoryRepository = categoryRepository;
         this.specieRepository = specieRepository;
         this.animalRepository = animalRepository;
         this.clientRepository = clientRepository;
+        this.articleRepository = articleRepository;
+        this.orderRepository = orderRepository;
     }
 
     public static void main(String[] args) {
@@ -31,34 +38,14 @@ public class DomesServerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+//        initClients();
 //        initAnimalsCategoriesAndSpecies();
-        initClients();
+//        initArticlesAndOrders();
 //        employeeRepository.save(new Employee(null, "Dramé","Sissako", "sissako@email.com", "3 place charles munch"));
 //        employeeRepository.save(new Employee(null, "Toure","Mamadou", "mamadou@email.com", "3 place charles munch"));
 //        employeeRepository.save(new Employee(null, "Goita","Asimi", "asimi@email.com", "3 place charles munch"));
 //        employeeRepository.save(new Employee(null, "Berthe","Johan", "johan@email.com", "3 place charles munch"));
 //        employeeRepository.save(new Employee(null, "Bolloré","Tristan", "tristan@email.com", "3 place charles munch"));
-
-
-//		employeeRepository.findAll().forEach(employee -> System.out.println(employee));
-//        Employee asimi = employeeRepository.findByFirstname("Asimi");
-//		System.out.println(asimi);
-
-        // Pagination
-//		List<Employee> pageOfEmployees = employeeRepository.findAll(PageRequest.of(2, 3)).getContent();
-//		pageOfEmployees.forEach(employee -> System.out.println(employee.getName()));
-
-        /**
-         *		Pagination with repository method that returns employees
-         *		by name that contains a specific letter and paginate
-         *		through the results
-         *	    Ps: The method name was choose so that spring will automatically know what to search
-         */
-//        Page<Employee> pageOfEmployees = employeeRepository.findByNameContaining("s", PageRequest.of(0, 3));
-//
-//        pageOfEmployees.getContent().forEach(employee -> {
-//            System.out.println(employee);
-//        });
     }
 
     private void initAnimalsCategoriesAndSpecies() {
@@ -455,12 +442,53 @@ public class DomesServerApplication implements CommandLineRunner {
     }
 
     private void initClients() {
-
-        clientRepository.save(new Client("Dramé", "Sissako", "0678942155", new Address("france", "lile", "3 rue du petit lion", "59130"), "sissako@email.fr", encoder.encode("sissako")));
-        clientRepository.save(new Client("Goita", "Asimi", "0741893026",new Address("france", "paris", "6 avenue des marchands de sable", "59130") , "asimi@email.fr", encoder.encode("asimi")));
-        clientRepository.save(new Client("Jakarta", "ariful", "0648799935",new Address("france", "bordeaux", "32 rue du chemin des vivants", "33000") , "ariful@email.fr", encoder.encode("ariful")));
-        clientRepository.save(new Client("Petit", "Jessie", "0713416885",new Address("france", "lyon", "71 boulevard du zenith", "69001") , "jessie@email.fr", encoder.encode("jessie")));
-        clientRepository.save(new Client("Simo", "Philippe", "0698633846",new Address("france", "marseille", "10 place du zinedine zidane", "13007") , "philippe@email.fr", encoder.encode("philippe")));
+        clientRepository.save(new Client("dramé", "sissako", "0678942155", "sissako@email.fr", new Address("france", "lile", "3 rue du petit lion", "59130"), encoder.encode("sissako")));
+        clientRepository.save(new Client("goita", "asimi", "0741893026", "asimi@email.fr", new Address("france", "paris", "6 avenue des marchands de sable", "59130"), encoder.encode("asimi")));
+        clientRepository.save(new Client("jakarta", "ariful", "0648799935", "ariful@email.fr", new Address("france", "bordeaux", "32 rue du chemin des vivants", "33000"), encoder.encode("ariful")));
+        clientRepository.save(new Client("petit", "jessie", "0713416885", "jessie@email.fr", new Address("france", "lyon", "71 boulevard du zenith", "69001"), encoder.encode("jessie")));
+        clientRepository.save(new Client("simo", "philippe", "0698633846", "philippe@email.fr", new Address("france", "marseille", "10 place du zinedine zidane", "13007"), encoder.encode("philippe")));
     }
 
+    private void initArticlesAndOrders() {
+        /*
+         * Creation of a client
+         * */
+        Client client = clientRepository.findByFirstname("sissako");
+
+        /*
+         * Implementation of three articles
+         * */
+        Category chien = categoryRepository.getCategoryByName("CHIEN");
+        Specie shibaInu = specieRepository.getSpeciesByName("Shiba-inu");
+        Article article1 = new Article(250, shibaInu, chien);
+        Article savedArticle1 = articleRepository.save(article1);
+
+        Category chat = categoryRepository.getCategoryByName("CHAT");
+        Specie abyssin = specieRepository.getSpeciesByName("Abyssin");
+        Article article2 = new Article(180, abyssin, chat);
+        Article savedArticle2 = articleRepository.save(article2);
+
+        Category reptile = categoryRepository.getCategoryByName("REPTILE");
+        Specie iguane = specieRepository.getSpeciesByName("Iguane");
+        Article article3 = new Article(350, iguane, reptile);
+        Article savedArticle3 = articleRepository.save(article3);
+
+        /*
+         * Implementing the saved order
+         * */
+
+        /*
+         * Create order and persist it
+         * */
+        Order order = new Order();
+        order.setArticles(List.of(savedArticle1, savedArticle2, savedArticle3));
+        order.setNumberOfArticles(order.getArticles().size());
+        order.setTotal(savedArticle1.getPrice()+savedArticle2.getPrice()+savedArticle3.getPrice());
+        order.setShippingAddress(client.getAddress());
+        order.setClient(client);
+
+        orderRepository.save(order);
+
+        clientRepository.save(client);
+    }
 }

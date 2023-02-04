@@ -2,21 +2,27 @@ package fr.greta.domes_server.services;
 
 import fr.greta.domes_server.dtos.client.ClientGetDTO;
 import fr.greta.domes_server.dtos.client.ClientPage;
+import fr.greta.domes_server.dtos.order.OrderGetDTO;
 import fr.greta.domes_server.entities.Client;
+import fr.greta.domes_server.entities.Order;
 import fr.greta.domes_server.repositories.ClientRepository;
+import fr.greta.domes_server.repositories.OrderRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
-public class ClientServiceImpl implements ClientService{
+public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
+    private final OrderRepository orderRepository;
 
-    public ClientServiceImpl(ClientRepository clientRepository) {
+    public ClientServiceImpl(ClientRepository clientRepository, OrderRepository orderRepository) {
         this.clientRepository = clientRepository;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -31,13 +37,12 @@ public class ClientServiceImpl implements ClientService{
         ClientPage clientPage = new ClientPage();
         clientPage.setTotalPages(page.getTotalPages());
         clientPage.setTotalElements((int) page.getTotalElements());
-        clientPage.setClients(castClientToClientDTO(page.getContent()));
+        clientPage.setClients(generateListOfClientGetDTO(page.getContent()));
 
         return clientPage;
     }
 
-    private List<ClientGetDTO> castClientToClientDTO(List<Client> clients) {
-
+    private List<ClientGetDTO> generateListOfClientGetDTO(List<Client> clients) {
         return clients.stream().map(client -> {
             ClientGetDTO clientGetDTO = new ClientGetDTO();
             clientGetDTO.setId(client.getId());
@@ -47,9 +52,23 @@ public class ClientServiceImpl implements ClientService{
             clientGetDTO.setPhoneNumber(client.getPhoneNumber());
             clientGetDTO.setRegistrationDate(client.getRegistrationDate());
             clientGetDTO.setEmail(client.getEmail());
-            clientGetDTO.setOrders(client.getOrders());
-
+            Order lastOrder = orderRepository.findFirstByClientId(client.getId());
+            if(lastOrder != null)
+                clientGetDTO.setLastOrder(generateOrderGetDTO(lastOrder));
             return clientGetDTO;
         }).toList();
     }
+    
+    private OrderGetDTO generateOrderGetDTO(Order order) {
+        OrderGetDTO orderGetDTO = new OrderGetDTO();
+        orderGetDTO.setArticles(order.getArticles());
+        orderGetDTO.setTotal(order.getTotal());
+        orderGetDTO.setId(order.getId());
+        orderGetDTO.setPurchaseDate(order.getPurchaseDate());
+        orderGetDTO.setShippingAddress(order.getShippingAddress());
+        orderGetDTO.setNumberOfArticles(order.getNumberOfArticles());
+        return orderGetDTO;
+    }
+
+
 }

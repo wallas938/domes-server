@@ -8,11 +8,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "t_category")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
