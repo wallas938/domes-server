@@ -6,5 +6,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ClientService {
     ClientPage getClients(String lastname, String firstname, String phoneNumber, String email, int pageNumber, int pageSize);
+    ClientPage searchBarGetClients(String lastname, String firstname, String phoneNumber, String email, int pageNumber, int pageSize);
 
 }
