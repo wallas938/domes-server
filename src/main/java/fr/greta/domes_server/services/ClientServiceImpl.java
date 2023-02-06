@@ -42,6 +42,24 @@ public class ClientServiceImpl implements ClientService {
         return clientPage;
     }
 
+    @Override
+    public ClientPage searchBarGetClients(String lastname, String firstname, String phoneNumber, String email, int pageNumber, int pageSize) {
+        Page<Client> page = clientRepository.findBySearchTerm(
+                lastname.toLowerCase(),
+                firstname.toLowerCase(),
+                phoneNumber.toLowerCase(),
+                email.toLowerCase(),
+                PageRequest.of(pageNumber, pageSize));
+
+        ClientPage clientPage = new ClientPage();
+        clientPage.setTotalPages(page.getTotalPages());
+        clientPage.setTotalElements((int) page.getTotalElements());
+        clientPage.setClients(generateListOfClientGetDTO(page.getContent()));
+
+        return clientPage;
+    }
+
+
     private List<ClientGetDTO> generateListOfClientGetDTO(List<Client> clients) {
         return clients.stream().map(client -> {
             ClientGetDTO clientGetDTO = new ClientGetDTO();

@@ -19,7 +19,7 @@ public class ClientController {
         this.clientService = clientService;
     }
 
-    @GetMapping(value = "/search")
+    @GetMapping(value = "/init")
     public ResponseEntity<ClientPage> getClients(
             HttpServletRequest request,
             @RequestParam(defaultValue = "%") String lastname,
@@ -31,6 +31,23 @@ public class ClientController {
         StringBuffer url = request.getRequestURL();
 
         ClientPage clientPage = clientService.getClients(lastname, firstname, phoneNumber, email, pageNumber, pageSize);
+        if (clientPage != null) {
+            return new ResponseEntity<>(clientPage, HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping(value = "/search")
+    public ResponseEntity<ClientPage> searchBarGetClients(
+            HttpServletRequest request,
+            @RequestParam(defaultValue = "%") String lastname,
+            @RequestParam(defaultValue = "%") String firstname,
+            @RequestParam(defaultValue = "%") String phoneNumber,
+            @RequestParam(defaultValue = "%") String email,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "15") int pageSize) {
+
+        ClientPage clientPage = clientService.searchBarGetClients(lastname, firstname, phoneNumber, email, pageNumber, pageSize);
         if (clientPage != null) {
             return new ResponseEntity<>(clientPage, HttpStatus.ACCEPTED);
         }

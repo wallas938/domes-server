@@ -18,6 +18,8 @@ public class Client{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+    @Transient
+    private String idStringified;
     @Column(length = 100, nullable = false)
     private String lastname;
     @Column(length = 100, nullable = false)
