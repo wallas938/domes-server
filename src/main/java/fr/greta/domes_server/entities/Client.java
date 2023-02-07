@@ -18,8 +18,6 @@ public class Client{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    @Transient
-    private String idStringified;
     @Column(length = 100, nullable = false)
     private String lastname;
     @Column(length = 100, nullable = false)
@@ -43,5 +41,13 @@ public class Client{
         this.email = email;
         this.address = address;
         this.password = password;
+    }
+
+    public String getLastname() {
+        return lastname.toUpperCase();
+    }
+
+    public String getFirstname() {
+        return firstname.substring(0,1).toUpperCase() + firstname.substring(1);
     }
 }
