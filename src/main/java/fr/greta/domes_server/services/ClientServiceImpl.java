@@ -1,18 +1,18 @@
 package fr.greta.domes_server.services;
 
+import fr.greta.domes_server.dtos.client.ClientEditDTO;
 import fr.greta.domes_server.dtos.client.ClientGetDTO;
 import fr.greta.domes_server.dtos.client.ClientPage;
 import fr.greta.domes_server.dtos.order.OrderGetDTO;
-import fr.greta.domes_server.entities.Client;
-import fr.greta.domes_server.entities.Order;
+import fr.greta.domes_server.entities.*;
 import fr.greta.domes_server.repositories.ClientRepository;
 import fr.greta.domes_server.repositories.OrderRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -59,6 +59,22 @@ public class ClientServiceImpl implements ClientService {
         return clientPage;
     }
 
+    @Override
+    public DomesResponse editClient(ClientEditDTO dto) {
+        try {
+            Optional<Client> optionalClient = clientRepository.findById(dto.getId());
+            optionalClient.get().setLastname(dto.getLastname().toLowerCase());
+            optionalClient.get().setFirstname(dto.getFirstname().toLowerCase());
+            optionalClient.get().setPhoneNumber(dto.getPhoneNumber().toLowerCase());
+            optionalClient.get().setEmail(dto.getEmail().toLowerCase());
+            optionalClient.get().setAddress(dto.getAddress());
+            clientRepository.save(optionalClient.get());
+            return new DomesResponse("Client modifié avec succès", true);
+        } catch (Exception e) {
+            return new DomesResponse("Un probleme est survenu lors de la modification du client", true);
+        }
+    }
+
 
     private List<ClientGetDTO> generateListOfClientGetDTO(List<Client> clients) {
         return clients.stream().map(client -> {
@@ -71,12 +87,12 @@ public class ClientServiceImpl implements ClientService {
             clientGetDTO.setRegistrationDate(client.getRegistrationDate());
             clientGetDTO.setEmail(client.getEmail());
             Order lastOrder = orderRepository.findFirstByClientId(client.getId());
-            if(lastOrder != null)
+            if (lastOrder != null)
                 clientGetDTO.setLastOrder(generateOrderGetDTO(lastOrder));
             return clientGetDTO;
         }).toList();
     }
-    
+
     private OrderGetDTO generateOrderGetDTO(Order order) {
         OrderGetDTO orderGetDTO = new OrderGetDTO();
         orderGetDTO.setArticles(order.getArticles());

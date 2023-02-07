@@ -1,7 +1,10 @@
 package fr.greta.domes_server.controllers;
 
 import fr.greta.domes_server.dtos.animal.AnimalPage;
+import fr.greta.domes_server.dtos.client.ClientEditDTO;
+import fr.greta.domes_server.dtos.client.ClientGetDTO;
 import fr.greta.domes_server.dtos.client.ClientPage;
+import fr.greta.domes_server.entities.DomesResponse;
 import fr.greta.domes_server.services.ClientService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -54,4 +57,12 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @PutMapping(value = "/{clientId}")
+    public ResponseEntity<String> editClient(@PathVariable String clientId, @RequestBody ClientEditDTO clientGetDTO) {
+        DomesResponse result = clientService.editClient(clientGetDTO);
+        if (result.getSuccess()) {
+            return new ResponseEntity<>(result.getMessage(), HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(result.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
