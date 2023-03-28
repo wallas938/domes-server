@@ -12,42 +12,21 @@ import java.util.UUID;
 @Table(name = "t_client")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Client {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
-    @Column(length = 100, nullable = false)
-    private String lastname;
-    @Column(length = 100, nullable = false)
-    private String firstname;
+@AllArgsConstructor
+@EqualsAndHashCode
+public class Client extends DomesUser {
     @Column(length = 10, nullable = false)
     private String phoneNumber;
-    @Column(length = 100, nullable = false)
-    private String email;
     @Embedded
     private Address address;
-    @Column(nullable = false)
-    private String password;
-    @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private LocalDate registrationDate = LocalDate.now();
 
-    public Client(String lastname, String firstname, String phoneNumber, String email, Address address, String password) {
-        this.lastname = lastname;
-        this.firstname = firstname;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.address = address;
-        this.password = password;
+    public Client(String lastname, String firstname, String email, String password) {
+        super(lastname, firstname, email, password);
     }
 
-    public String getLastname() {
-        return lastname.toUpperCase();
-    }
-
-    public String getFirstname() {
-        return firstname.substring(0,1).toUpperCase() + firstname.substring(1);
+    @Override
+    public String toString() {
+        return super.toString() + " Client(phoneNumber="+phoneNumber+" address="+address+")";
     }
 }

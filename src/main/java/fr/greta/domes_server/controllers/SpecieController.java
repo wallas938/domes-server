@@ -2,6 +2,7 @@ package fr.greta.domes_server.controllers;
 
 import fr.greta.domes_server.entities.Specie;
 import fr.greta.domes_server.services.SpecieService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +12,9 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("api/species")
+@RequiredArgsConstructor
 public class SpecieController {
-
     private final SpecieService specieService;
-
-    public SpecieController(SpecieService specieService) {
-        this.specieService = specieService;
-    }
 
     @GetMapping
     public ResponseEntity<List<Specie>> getSpecies() {

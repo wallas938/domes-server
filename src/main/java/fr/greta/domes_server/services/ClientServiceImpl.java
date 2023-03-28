@@ -25,73 +25,73 @@ public class ClientServiceImpl implements ClientService {
         this.orderRepository = orderRepository;
     }
 
-    @Override
-    public ClientPage getClients(String lastname, String firstname, String phoneNumber, String email, int pageNumber, int pageSize) {
-        Page<Client> page = clientRepository.getClients(
-                lastname,
-                firstname,
-                phoneNumber,
-                email,
-                PageRequest.of(pageNumber, pageSize));
+//    @Override
+//    public ClientPage getClients(String lastname, String firstname, String phoneNumber, String email, int pageNumber, int pageSize) {
+//        Page<Client> page = clientRepository.getClients(
+//                lastname,
+//                firstname,
+//                phoneNumber,
+//                email,
+//                PageRequest.of(pageNumber, pageSize));
+//
+//        ClientPage clientPage = new ClientPage();
+//        clientPage.setTotalPages(page.getTotalPages());
+//        clientPage.setTotalElements((int) page.getTotalElements());
+//        clientPage.setClients(generateListOfClientGetDTO(page.getContent()));
+//
+//        return clientPage;
+//    }
 
-        ClientPage clientPage = new ClientPage();
-        clientPage.setTotalPages(page.getTotalPages());
-        clientPage.setTotalElements((int) page.getTotalElements());
-        clientPage.setClients(generateListOfClientGetDTO(page.getContent()));
+//    @Override
+//    public ClientPage searchBarGetClients(String lastname, String firstname, String phoneNumber, String email, int pageNumber, int pageSize) {
+//        Page<Client> page = clientRepository.findBySearchTerm(
+//                lastname.toLowerCase(),
+//                firstname.toLowerCase(),
+//                phoneNumber.toLowerCase(),
+//                email.toLowerCase(),
+//                PageRequest.of(pageNumber, pageSize));
+//
+//        ClientPage clientPage = new ClientPage();
+//        clientPage.setTotalPages(page.getTotalPages());
+//        clientPage.setTotalElements((int) page.getTotalElements());
+//        clientPage.setClients(generateListOfClientGetDTO(page.getContent()));
+//
+//        return clientPage;
+//    }
 
-        return clientPage;
-    }
-
-    @Override
-    public ClientPage searchBarGetClients(String lastname, String firstname, String phoneNumber, String email, int pageNumber, int pageSize) {
-        Page<Client> page = clientRepository.findBySearchTerm(
-                lastname.toLowerCase(),
-                firstname.toLowerCase(),
-                phoneNumber.toLowerCase(),
-                email.toLowerCase(),
-                PageRequest.of(pageNumber, pageSize));
-
-        ClientPage clientPage = new ClientPage();
-        clientPage.setTotalPages(page.getTotalPages());
-        clientPage.setTotalElements((int) page.getTotalElements());
-        clientPage.setClients(generateListOfClientGetDTO(page.getContent()));
-
-        return clientPage;
-    }
-
-    @Override
-    public DomesResponse editClient(ClientEditDTO dto) {
-        try {
-            Optional<Client> optionalClient = clientRepository.findById(dto.getId());
-            optionalClient.get().setLastname(dto.getLastname().toLowerCase());
-            optionalClient.get().setFirstname(dto.getFirstname().toLowerCase());
-            optionalClient.get().setPhoneNumber(dto.getPhoneNumber().toLowerCase());
-            optionalClient.get().setEmail(dto.getEmail().toLowerCase());
-            optionalClient.get().setAddress(dto.getAddress());
-            clientRepository.save(optionalClient.get());
-            return new DomesResponse("Client modifié avec succès", true);
-        } catch (Exception e) {
-            return new DomesResponse("Un probleme est survenu lors de la modification du client", true);
-        }
-    }
+//    @Override
+//    public DomesResponse editClient(ClientEditDTO dto) {
+//        try {
+//            Optional<Client> optionalClient = clientRepository.findById(dto.getId());
+//            optionalClient.get().setLastname(dto.getLastname().toLowerCase());
+//            optionalClient.get().setFirstname(dto.getFirstname().toLowerCase());
+//            optionalClient.get().setPhoneNumber(dto.getPhoneNumber().toLowerCase());
+//            optionalClient.get().setEmail(dto.getEmail().toLowerCase());
+//            optionalClient.get().setAddress(dto.getAddress());
+//            clientRepository.save(optionalClient.get());
+//            return new DomesResponse("Client modifié avec succès", true);
+//        } catch (Exception e) {
+//            return new DomesResponse("Un probleme est survenu lors de la modification du client", true);
+//        }
+//    }
 
 
-    private List<ClientGetDTO> generateListOfClientGetDTO(List<Client> clients) {
-        return clients.stream().map(client -> {
-            ClientGetDTO clientGetDTO = new ClientGetDTO();
-            clientGetDTO.setId(client.getId());
-            clientGetDTO.setLastname(client.getLastname());
-            clientGetDTO.setFirstname(client.getFirstname());
-            clientGetDTO.setAddress(client.getAddress());
-            clientGetDTO.setPhoneNumber(client.getPhoneNumber());
-            clientGetDTO.setRegistrationDate(client.getRegistrationDate());
-            clientGetDTO.setEmail(client.getEmail());
-            Order lastOrder = orderRepository.findFirstByClientId(client.getId());
-            if (lastOrder != null)
-                clientGetDTO.setLastOrder(generateOrderGetDTO(lastOrder));
-            return clientGetDTO;
-        }).toList();
-    }
+//    private List<ClientGetDTO> generateListOfClientGetDTO(List<Client> clients) {
+//        return clients.stream().map(client -> {
+//            ClientGetDTO clientGetDTO = new ClientGetDTO();
+//            clientGetDTO.setId(client.getId());
+//            clientGetDTO.setLastname(client.getLastname());
+//            clientGetDTO.setFirstname(client.getFirstname());
+//            clientGetDTO.setAddress(client.getAddress());
+//            clientGetDTO.setPhoneNumber(client.getPhoneNumber());
+//            clientGetDTO.setRegistrationDate(client.getRegistrationDate());
+//            clientGetDTO.setEmail(client.getEmail());
+//            Order lastOrder = orderRepository.findFirstByClientId(client.getId());
+//            if (lastOrder != null)
+//                clientGetDTO.setLastOrder(generateOrderGetDTO(lastOrder));
+//            return clientGetDTO;
+//        }).toList();
+//    }
 
     private OrderGetDTO generateOrderGetDTO(Order order) {
         OrderGetDTO orderGetDTO = new OrderGetDTO();

@@ -2,6 +2,7 @@ package fr.greta.domes_server.controllers;
 
 import fr.greta.domes_server.entities.Category;
 import fr.greta.domes_server.services.CategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +12,10 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("api/categories")
+@RequiredArgsConstructor
 public class CategoryController {
 
     private final CategoryService categoryService;
-
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
 
     @GetMapping
     public ResponseEntity<List<Category>> getCategories() {
