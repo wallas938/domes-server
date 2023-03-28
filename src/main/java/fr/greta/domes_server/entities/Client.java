@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Client{
+public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
