@@ -33,7 +33,6 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         if (!bCryptPasswordEncoder.matches(authentication.getCredentials().toString(), domesUser.getPassword())) {
             throw new BadCredentialsException("Invalid password");
         }
-
         return new UsernamePasswordAuthenticationToken(
                 domesUser.getEmail(), domesUser.getPassword(), null);
     }
