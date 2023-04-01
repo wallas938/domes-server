@@ -9,7 +9,6 @@ import java.util.UUID;
 
 public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
     Employee findByFirstname(String name);
-
-    // Find employees by their names and by size for pagination
+    Employee findByEmail(String name);
     Page<Employee> findByFirstnameContaining(String name, Pageable pageable);
 }

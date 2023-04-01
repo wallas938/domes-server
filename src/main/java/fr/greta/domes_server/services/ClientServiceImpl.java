@@ -6,7 +6,9 @@ import fr.greta.domes_server.dtos.client.ClientPage;
 import fr.greta.domes_server.dtos.order.OrderGetDTO;
 import fr.greta.domes_server.entities.*;
 import fr.greta.domes_server.repositories.ClientRepository;
+import fr.greta.domes_server.repositories.DomesUserRepository;
 import fr.greta.domes_server.repositories.OrderRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -15,15 +17,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
     private final OrderRepository orderRepository;
-
-    public ClientServiceImpl(ClientRepository clientRepository, OrderRepository orderRepository) {
-        this.clientRepository = clientRepository;
-        this.orderRepository = orderRepository;
-    }
+    private final DomesUserRepository domesUserRepository;
 
     @Override
     public ClientPage getClients(String lastname, String firstname, String phoneNumber, String email, int pageNumber, int pageSize) {
@@ -78,15 +77,16 @@ public class ClientServiceImpl implements ClientService {
 
     private List<ClientGetDTO> generateListOfClientGetDTO(List<Client> clients) {
         return clients.stream().map(client -> {
+            DomesUser domesUser = domesUserRepository.findByEmail(client.getEmail()).get();
             ClientGetDTO clientGetDTO = new ClientGetDTO();
-            clientGetDTO.setId(client.getId());
             clientGetDTO.setLastname(client.getLastname());
             clientGetDTO.setFirstname(client.getFirstname());
             clientGetDTO.setAddress(client.getAddress());
             clientGetDTO.setPhoneNumber(client.getPhoneNumber());
             clientGetDTO.setRegistrationDate(client.getRegistrationDate());
             clientGetDTO.setEmail(client.getEmail());
-            Order lastOrder = orderRepository.findFirstByClientId(client.getId());
+            clientGetDTO.setId(domesUser.getId());
+            Order lastOrder = orderRepository.findFirstByClientId(domesUser.getId());
             if (lastOrder != null)
                 clientGetDTO.setLastOrder(generateOrderGetDTO(lastOrder));
             return clientGetDTO;

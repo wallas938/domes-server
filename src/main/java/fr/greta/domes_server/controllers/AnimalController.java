@@ -7,6 +7,7 @@ import fr.greta.domes_server.entities.Animal;
 import fr.greta.domes_server.entities.DomesResponse;
 import fr.greta.domes_server.services.AnimalService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +15,9 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping("api/animals")
+@RequiredArgsConstructor
 public class AnimalController {
     private final AnimalService animalService;
-
-    public AnimalController(AnimalService animalService) {
-        this.animalService = animalService;
-    }
 
     @GetMapping(value = "/search")
     public ResponseEntity<AnimalPage> getAnimals(
@@ -28,7 +26,7 @@ public class AnimalController {
             @RequestParam(defaultValue = "50") double minPrice,
             @RequestParam(defaultValue = "9999") double maxPrice,
             @RequestParam(defaultValue = "1") int minAge,
-            @RequestParam(defaultValue = "10") int maxAge,
+            @RequestParam(defaultValue = "24") int maxAge,
             @RequestParam(defaultValue = "%") String categoryName,
             @RequestParam(defaultValue = "%") String specieName) {
 //        System.out.println(String.format("/search: minPrice:%s - maxPrice=%s - minAge=%s - maxAge=%s - categoryName=%s - specieName=%s - pageNumber=%s - pageSize=%s" , minPrice, maxPrice, minAge, maxAge, categoryName, specieName, pageNumber, pageSize));

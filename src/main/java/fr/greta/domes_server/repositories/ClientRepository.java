@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.UUID;
 
 public interface ClientRepository extends JpaRepository<Client, UUID> {
+    Client findByEmail(String email);
     @Query("SELECT c " +
             "FROM Client c " +
             "WHERE " +

@@ -36,11 +36,11 @@ public class Animal {
     @ManyToOne(fetch = FetchType.EAGER)
     private Specie specie;
     @Column(nullable = false)
-    @DecimalMin(value = "50.00", message = "Min age = 1.0")
+    @DecimalMin(value = "50.00", message = "Min price = 50.00")
     private double price;
     @Column(nullable = false)
     @Min(value = 1, message = "Min age = 1")
-    @Max(value = 10, message = "Max age = 10")
+    @Max(value = 24, message = "Max age = 24")
     private int age;
     @Column
     private boolean sold;

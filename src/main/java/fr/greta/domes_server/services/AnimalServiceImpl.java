@@ -10,6 +10,7 @@ import fr.greta.domes_server.entities.Specie;
 import fr.greta.domes_server.repositories.AnimalRepository;
 import fr.greta.domes_server.repositories.CategoryRepository;
 import fr.greta.domes_server.repositories.SpecieRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -17,18 +18,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class AnimalServiceImpl implements AnimalService {
 
     private final AnimalRepository animalRepository;
     private final CategoryRepository categoryRepository;
     private final SpecieRepository specieRepository;
-
-    public AnimalServiceImpl(AnimalRepository animalRepository, CategoryRepository categoryRepository, SpecieRepository specieRepository) {
-        this.animalRepository = animalRepository;
-        this.categoryRepository = categoryRepository;
-        this.specieRepository = specieRepository;
-    }
-
 
     @Override
     public DomesResponse addAnimal(AnimalCreateDto animalCreateDto) {
