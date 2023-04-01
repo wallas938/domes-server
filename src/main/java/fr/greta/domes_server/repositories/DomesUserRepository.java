@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
+
 @Service
-public interface DomesUserRepository extends JpaRepository<DomesUser, Long> {
+public interface DomesUserRepository extends JpaRepository<DomesUser, UUID> {
     Optional<DomesUser> findByEmail(String email);
 }

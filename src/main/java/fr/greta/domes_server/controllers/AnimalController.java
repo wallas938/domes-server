@@ -26,7 +26,7 @@ public class AnimalController {
             @RequestParam(defaultValue = "50") double minPrice,
             @RequestParam(defaultValue = "9999") double maxPrice,
             @RequestParam(defaultValue = "1") int minAge,
-            @RequestParam(defaultValue = "10") int maxAge,
+            @RequestParam(defaultValue = "24") int maxAge,
             @RequestParam(defaultValue = "%") String categoryName,
             @RequestParam(defaultValue = "%") String specieName) {
 //        System.out.println(String.format("/search: minPrice:%s - maxPrice=%s - minAge=%s - maxAge=%s - categoryName=%s - specieName=%s - pageNumber=%s - pageSize=%s" , minPrice, maxPrice, minAge, maxAge, categoryName, specieName, pageNumber, pageSize));

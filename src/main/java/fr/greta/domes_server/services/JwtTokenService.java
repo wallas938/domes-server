@@ -36,7 +36,7 @@ public class JwtTokenService {
                 Map<String, Object> extraClaims,
                 DomesUser domesUser
         ) {
-            return Jwts
+            return "Bearer "+Jwts
                     .builder()
                     .setClaims(extraClaims)
                     .setSubject(domesUser.getEmail())
@@ -46,9 +46,9 @@ public class JwtTokenService {
                     .compact();
         }
 
-        public boolean isTokenValid(String token, UserDetails userDetails) {
+        public boolean isTokenValid(String token, DomesUser domesUser) {
             final String username = extractUsername(token);
-            return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+            return (username.equals(domesUser.getEmail())) && !isTokenExpired(token);
         }
 
         private boolean isTokenExpired(String token) {

@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper=false)
 public class Client extends DomesUser {
     @Column(length = 10, nullable = false)
     private String phoneNumber;

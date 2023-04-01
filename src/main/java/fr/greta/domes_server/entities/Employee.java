@@ -9,7 +9,7 @@ import java.util.UUID;
 @Table(name = "t_employee")
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper=false)
 public class Employee extends DomesUser {
     public Employee(String lastname, String firstname, String email, String password) {
         super(lastname, firstname, email, password);
