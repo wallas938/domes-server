@@ -1,11 +1,12 @@
 package fr.greta.domes_server.controllers;
 
-import fr.greta.domes_server.entities.AuthenticationToken;
-import fr.greta.domes_server.entities.DomesUser;
-import fr.greta.domes_server.entities.Credentials;
-import fr.greta.domes_server.entities.DomesResponse;
+import fr.greta.domes_server.entities.*;
+import fr.greta.domes_server.repositories.ClientRepository;
 import fr.greta.domes_server.repositories.DomesUserRepository;
+import fr.greta.domes_server.repositories.EmployeeRepository;
 import fr.greta.domes_server.services.JwtTokenService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @CrossOrigin
 @RestController
 @RequestMapping("api/auth")
@@ -24,16 +27,36 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final DomesUserRepository domesUserRepository;
+    private final ClientRepository clientRepository;
+    private final EmployeeRepository employeeRepository;
 
     private final JwtTokenService jwtTokenService;
+    private final HttpServletRequest request;
+    private final HttpServletResponse response;
 
     @PostMapping("/signup")
     public ResponseEntity<DomesResponse> signup(@RequestBody DomesUser domesUser) {
         return null;
     }
 
-    @PostMapping("/login")
-    public AuthenticationToken login(@RequestBody Credentials credentials) {
+    @PostMapping("/employee-authentication")
+    public AuthenticationToken employeeAuthentication(@RequestBody Credentials credentials) {
+
+        Authentication authenticate = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        credentials.getEmail(), credentials.getPassword()
+                )
+        );
+
+        String issuer = request.getRequestURI();
+
+        var user = employeeRepository.findByEmail(credentials.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return new AuthenticationToken(jwtTokenService.generateToken(user, issuer), jwtTokenService.generateToken(user, issuer));
+    }
+
+    @PostMapping("/client-authentication")
+    public AuthenticationToken clientAuthentication(@RequestBody Credentials credentials) {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -41,8 +64,10 @@ public class AuthenticationController {
                 )
         );
 
-        var user = domesUserRepository.findByEmail(credentials.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        String issuer = request.getRequestURI();
 
-        return new AuthenticationToken(jwtTokenService.generateToken(user), jwtTokenService.generateToken(user));
+        var user = clientRepository.findByEmail(credentials.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return new AuthenticationToken(jwtTokenService.generateToken(user, issuer), jwtTokenService.generateToken(user, issuer));
     }
 }
