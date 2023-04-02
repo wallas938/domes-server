@@ -1,7 +1,11 @@
 package fr.greta.domes_server.configuration;
 
+import fr.greta.domes_server.entities.Client;
 import fr.greta.domes_server.entities.DomesUser;
+import fr.greta.domes_server.entities.Employee;
+import fr.greta.domes_server.repositories.ClientRepository;
 import fr.greta.domes_server.repositories.DomesUserRepository;
+import fr.greta.domes_server.repositories.EmployeeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,22 +24,30 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 @AllArgsConstructor
 public class UserAuthenticationProvider implements AuthenticationProvider {
+
     private final DomesUserRepository domesUserRepository;
+
+    private final ClientRepository clientRepository;
+
+    private final EmployeeRepository employeeRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+
         DomesUser domesUser = domesUserRepository.findByEmail(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User Not Found!"));
         // verify that the provided password matches the user's hashed password
         if (!bCryptPasswordEncoder.matches(authentication.getCredentials().toString(), domesUser.getPassword())) {
             throw new BadCredentialsException("Invalid password");
         }
         return new UsernamePasswordAuthenticationToken(
-                domesUser.getEmail(), domesUser.getPassword(), null);
+                domesUser.getEmail(), domesUser.getPassword(), domesUser.getAuthorities());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package fr.greta.domes_server;
 
+import fr.greta.domes_server.configuration.Role;
 import fr.greta.domes_server.entities.*;
 import fr.greta.domes_server.repositories.*;
 import lombok.AllArgsConstructor;
@@ -49,6 +50,7 @@ public class DomesServerApplication implements CommandLineRunner {
         client.setLastname("drame");
         client.setFirstname("Sissako");
         client.setEmail("sissako@email.com");
+        client.setRole(Role.CLIENT);
         client.setPassword(bCryptPasswordEncoder.encode("Password123"));
 
         client.setPhoneNumber("0678942155");
@@ -58,6 +60,7 @@ public class DomesServerApplication implements CommandLineRunner {
         employee.setLastname("goita");
         employee.setFirstname("asimi");
         employee.setEmail("asimi@email.fr");
+        employee.setRole(Role.EMPLOYEE);
         employee.setPassword(bCryptPasswordEncoder.encode("Password123"));
 
         domesUserRepository.findByEmail(client.getEmail()).ifPresentOrElse(domesUser -> System.out.println(domesUser.getFirstname() + "Existe déja"), () -> domesUserRepository.save(client));
