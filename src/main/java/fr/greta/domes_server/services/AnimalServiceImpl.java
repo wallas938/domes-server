@@ -49,6 +49,7 @@ public class AnimalServiceImpl implements AnimalService {
             animal.setSecondPicture(animalCreateDto.getSecondPicture());
             animal.setThirdPicture(animalCreateDto.getThirdPicture());
             animal.setFourthPicture(animalCreateDto.getFourthPicture());
+            animal.setDescription(animalCreateDto.getDescription());
             animal.setSold(false);
 
             animalRepository.save(animal);
@@ -103,20 +104,22 @@ public class AnimalServiceImpl implements AnimalService {
             if (specie == null)
                 return null;
 
-            Optional<Animal> animal = animalRepository.findById(dto.getId());
+            Optional<Animal> optionalAnimal = animalRepository.findById(dto.getId());
 
-            animal.get().setAge(dto.getAge());
-            animal.get().setPrice(dto.getPrice());
-            animal.get().setCategory(category);
-            animal.get().setSpecie(specie);
-            animal.get().setDescription(dto.getDescription());
-            animal.get().setMainPicture(dto.getMainPicture());
-            animal.get().setMainPicture(dto.getMainPicture());
-            animal.get().setSecondPicture(dto.getSecondPicture());
-            animal.get().setThirdPicture(dto.getThirdPicture());
-            animal.get().setFourthPicture(dto.getFourthPicture());
+            optionalAnimal.ifPresent(animal -> {
+                animal.setAge(dto.getAge());
+                animal.setPrice(dto.getPrice());
+                animal.setCategory(category);
+                animal.setSpecie(specie);
+                animal.setDescription(dto.getDescription());
+                animal.setMainPicture(dto.getMainPicture());
+                animal.setMainPicture(dto.getMainPicture());
+                animal.setSecondPicture(dto.getSecondPicture());
+                animal.setThirdPicture(dto.getThirdPicture());
+                animal.setFourthPicture(dto.getFourthPicture());
+            });
 
-            return animalRepository.save(animal.get());
+            return animalRepository.save(optionalAnimal.get());
         } catch (Exception e) {
             return null;
         }
