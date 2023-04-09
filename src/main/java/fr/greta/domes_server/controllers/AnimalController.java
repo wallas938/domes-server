@@ -57,7 +57,7 @@ public class AnimalController {
         return new ResponseEntity<>(response.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("/{animalId}")
+    @PutMapping(value = "{animalId}")
     public ResponseEntity<Animal> postAnimal(@RequestBody @Valid AnimalEditDTO dto, @PathVariable String animalId) {
 
         Animal animal = animalService.editAnimal(dto);

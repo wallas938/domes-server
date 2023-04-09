@@ -32,10 +32,6 @@ import java.util.Optional;
 public class UserAuthenticationProvider implements AuthenticationProvider {
 
     private final DomesUserRepository domesUserRepository;
-
-    private final ClientRepository clientRepository;
-
-    private final EmployeeRepository employeeRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     @Override
