@@ -44,8 +44,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        System.out.println("securityFilterChain");
-
         http.cors().and().csrf(AbstractHttpConfigurer::disable);
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -68,8 +66,6 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-        System.out.println("authManager");
-
         AuthenticationManagerBuilder auth = http.getSharedObject(AuthenticationManagerBuilder.class);
 
         auth.userDetailsService(email -> {

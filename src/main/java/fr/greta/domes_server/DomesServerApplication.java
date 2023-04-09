@@ -35,9 +35,9 @@ public class DomesServerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        initClients();
-        initAnimalsCategoriesAndSpecies();
-        initArticlesAndOrders();
+//        initClients();
+//        initAnimalsCategoriesAndSpecies();
+//        initArticlesAndOrders();
 //        employeeRepository.save(new DomesUser(null, "Dramé","Sissako", "sissako@email.com", "3 place charles munch"));
 //        employeeRepository.save(new DomesUser(null, "Toure","Mamadou", "mamadou@email.com", "3 place charles munch"));
 //        employeeRepository.save(new DomesUser(null, "Goita","Asimi", "asimi@email.com", "3 place charles munch"));
