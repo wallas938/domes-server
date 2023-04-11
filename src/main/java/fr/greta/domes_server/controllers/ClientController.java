@@ -39,6 +39,7 @@ public class ClientController {
     }
 
     @GetMapping(value = "/search")
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYEE')")
     public ResponseEntity<ClientPage> searchBarGetClients(
             HttpServletRequest request,
             @RequestParam(defaultValue = "%") String lastname,

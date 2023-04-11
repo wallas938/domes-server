@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -90,7 +91,7 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public Animal editAnimal(AnimalEditDTO dto) {
+    public Animal editAnimal(AnimalEditDTO dto, String animalId) {
 
         try {
 
@@ -104,7 +105,7 @@ public class AnimalServiceImpl implements AnimalService {
             if (specie == null)
                 return null;
 
-            Optional<Animal> optionalAnimal = animalRepository.findById(dto.getId());
+            Optional<Animal> optionalAnimal = animalRepository.findById(UUID.fromString(animalId));
 
             optionalAnimal.ifPresent(animal -> {
                 animal.setAge(dto.getAge());
