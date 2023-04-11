@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -35,11 +37,7 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final UserAuthenticationProvider authProvider;
-
     private final DomesUserRepository domesUserRepository;
-    private final ClientRepository clientRepository;
-    private final EmployeeRepository employeeRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -54,9 +52,9 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/animals/**").permitAll()
                                 .anyRequest().authenticated()
                                 .and()
-                                .authenticationProvider(authProvider)
+                                .authenticationProvider(authenticationProvider())
                                 .addFilterBefore(
-                                        new JwtAuthorizationFilter(domesUserRepository, clientRepository, employeeRepository),
+                                        new JwtAuthorizationFilter(domesUserRepository),
                                         UsernamePasswordAuthenticationFilter.class)
                 );
 
@@ -65,16 +63,11 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder auth = http.getSharedObject(AuthenticationManagerBuilder.class);
-
-        auth.userDetailsService(email -> {
-            DomesUser domesUser = domesUserRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not Found"));
-
-            return new User(domesUser.getEmail(), domesUser.getPassword(), domesUser.getAuthorities());
-
-        });
-        return auth.build();
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService());
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return authenticationProvider;
     }
 
     @Bean

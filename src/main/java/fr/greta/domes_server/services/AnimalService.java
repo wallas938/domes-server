@@ -12,5 +12,5 @@ public interface AnimalService {
     DomesResponse addAnimal(AnimalCreateDto animal);
     AnimalPage getAnimalsBySize(int pageSize, int size);
     AnimalPage getAnimals(double minPrice, double maxPrice, int minAge, int maxAge, String categoryName, String specieName, int pageNumber, int pageSize);
-    Animal editAnimal(AnimalEditDTO dto);
+    Animal editAnimal(AnimalEditDTO dto, String animalId);
 }

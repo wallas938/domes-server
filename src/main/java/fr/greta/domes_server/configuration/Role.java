@@ -1,6 +1,6 @@
 package fr.greta.domes_server.configuration;
 
 public enum Role {
-    CLIENT,
-    EMPLOYEE
+    ROLE_CLIENT,
+    ROLE_EMPLOYEE
 }

@@ -15,8 +15,6 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class AnimalEditDTO {
 
-    @NotNull(message = "L'ID de l'animal est manquant")
-    private UUID id;
     @NotNull(message = "Ajouter une catégory")
     private String category;
     @NotNull(message = "Ajouter une espèce")

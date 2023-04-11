@@ -52,7 +52,7 @@ public class AuthenticationController {
 
         var user = employeeRepository.findByEmail(credentials.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new AuthenticationToken(jwtTokenService.generateToken(user, issuer), jwtTokenService.generateToken(user, issuer));
+        return new AuthenticationToken(jwtTokenService.generateToken(user, issuer), jwtTokenService.generateRefreshToken(user, issuer));
     }
 
     @PostMapping("/client-authentication")
@@ -68,6 +68,6 @@ public class AuthenticationController {
 
         var user = clientRepository.findByEmail(credentials.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new AuthenticationToken(jwtTokenService.generateToken(user, issuer), jwtTokenService.generateToken(user, issuer));
+        return new AuthenticationToken(jwtTokenService.generateToken(user, issuer), jwtTokenService.generateRefreshToken(user, issuer));
     }
 }

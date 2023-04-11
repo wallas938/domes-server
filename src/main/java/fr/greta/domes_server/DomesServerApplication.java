@@ -50,7 +50,7 @@ public class DomesServerApplication implements CommandLineRunner {
         client.setLastname("drame");
         client.setFirstname("Sissako");
         client.setEmail("sissako@email.com");
-        client.setRole(Role.CLIENT);
+        client.setRole(Role.ROLE_CLIENT);
         client.setPassword(bCryptPasswordEncoder.encode("Password123"));
 
         client.setPhoneNumber("0678942155");
@@ -60,7 +60,7 @@ public class DomesServerApplication implements CommandLineRunner {
         employee.setLastname("goita");
         employee.setFirstname("asimi");
         employee.setEmail("asimi@email.fr");
-        employee.setRole(Role.EMPLOYEE);
+        employee.setRole(Role.ROLE_EMPLOYEE);
         employee.setPassword(bCryptPasswordEncoder.encode("Password123"));
 
         domesUserRepository.findByEmail(client.getEmail()).ifPresentOrElse(domesUser -> System.out.println(domesUser.getFirstname() + "Existe déja"), () -> domesUserRepository.save(client));

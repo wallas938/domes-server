@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -48,6 +49,7 @@ public class AnimalController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYEE')")
     public ResponseEntity<String> postAnimal(@RequestBody @Valid AnimalCreateDto dto) {
         System.out.println(dto);
         DomesResponse response = animalService.addAnimal(dto);
@@ -58,9 +60,10 @@ public class AnimalController {
     }
 
     @PutMapping(value = "{animalId}")
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYEE')")
     public ResponseEntity<Animal> postAnimal(@RequestBody @Valid AnimalEditDTO dto, @PathVariable String animalId) {
 
-        Animal animal = animalService.editAnimal(dto);
+        Animal animal = animalService.editAnimal(dto, animalId);
 
         if (animal != null)
             return new ResponseEntity<>(animal, HttpStatus.CREATED);

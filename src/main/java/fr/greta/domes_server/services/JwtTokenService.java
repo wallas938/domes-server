@@ -32,6 +32,10 @@ public class JwtTokenService {
         return generateToken(new HashMap<>(), domesUser, issuer);
     }
 
+    public String generateRefreshToken(DomesUser domesUser, String issuer) {
+        return generateRefreshToken(new HashMap<>(), domesUser, issuer);
+    }
+
     public String generateToken(
             Map<String, Object> extraClaims,
             DomesUser domesUser,
@@ -43,7 +47,24 @@ public class JwtTokenService {
                 .setClaims(extraClaims)
                 .setSubject(domesUser.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5)) // ms, s, min
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .setIssuer(issuer)
+                .compact();
+    }
+
+    public String generateRefreshToken(
+            Map<String, Object> extraClaims,
+            DomesUser domesUser,
+            String issuer
+    ) {
+        extraClaims.put("authorities", domesUser.getAuthorities());
+        return "Bearer " + Jwts
+                .builder()
+                .setClaims(extraClaims)
+                .setSubject(domesUser.getEmail())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 24 * 7))) // ms, s, min, 24, week
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .setIssuer(issuer)
                 .compact();
