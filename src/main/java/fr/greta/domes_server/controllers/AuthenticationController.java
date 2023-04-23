@@ -8,17 +8,13 @@ import fr.greta.domes_server.services.JwtTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -40,7 +36,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/employee-authentication")
-    public AuthenticationToken employeeAuthentication(@RequestBody Credentials credentials) {
+    public AuthenticationTokenResponse employeeAuthentication(@RequestBody Credentials credentials) {
 
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -52,11 +48,11 @@ public class AuthenticationController {
 
         var user = employeeRepository.findByEmail(credentials.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new AuthenticationToken(jwtTokenService.generateToken(user, issuer), jwtTokenService.generateRefreshToken(user, issuer));
+        return new AuthenticationTokenResponse(jwtTokenService.generateToken(user, issuer), jwtTokenService.generateRefreshToken(user, issuer));
     }
 
     @PostMapping("/client-authentication")
-    public AuthenticationToken clientAuthentication(@RequestBody Credentials credentials) {
+    public ResponseEntity<AuthenticationTokenResponse> clientAuthentication(@RequestBody Credentials credentials) {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -68,6 +64,42 @@ public class AuthenticationController {
 
         var user = clientRepository.findByEmail(credentials.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new AuthenticationToken(jwtTokenService.generateToken(user, issuer), jwtTokenService.generateRefreshToken(user, issuer));
+        return new ResponseEntity<>(new AuthenticationTokenResponse(jwtTokenService.generateToken(user, issuer), jwtTokenService.generateRefreshToken(user, issuer)), HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/employee/token/refresh")
+    public ResponseEntity<AuthenticationTokenResponse> renewEmployeeAccessToken(@RequestBody AuthenticationTokenRequest authenticationTokenRequest) {
+
+        var emailFromRefreshToken = jwtTokenService.extractUsername(authenticationTokenRequest.getRefreshToken());
+
+        if (emailFromRefreshToken == null) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        var employee = employeeRepository.findByEmail(authenticationTokenRequest.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (jwtTokenService.isTokenValid(authenticationTokenRequest.getRefreshToken(), employee)) {
+            String issuer = request.getRequestURI();
+            return new ResponseEntity<>(new AuthenticationTokenResponse(jwtTokenService.generateToken(employee, issuer), authenticationTokenRequest.getRefreshToken()), HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    @PostMapping("/client/token/refresh")
+    public ResponseEntity<AuthenticationTokenResponse> renewClientAccessToken(@RequestBody AuthenticationTokenRequest authenticationTokenRequest) {
+
+        String emailFromRefreshToken = jwtTokenService.extractUsername(authenticationTokenRequest.getRefreshToken());
+
+        if (emailFromRefreshToken != null) {
+
+            var client = clientRepository.findByEmail(authenticationTokenRequest.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+            if (jwtTokenService.isTokenValid(authenticationTokenRequest.getRefreshToken(), client)) {
+                String issuer = request.getRequestURI();
+                return new ResponseEntity<>(new AuthenticationTokenResponse(jwtTokenService.generateToken(client, issuer), authenticationTokenRequest.getRefreshToken()), HttpStatus.ACCEPTED);
+            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 }

@@ -20,12 +20,21 @@ public class JwtTokenService {
     private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        try {
+            return extractClaim(token, Claims::getSubject);
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+        try {
+            final Claims claims = extractAllClaims(token);
+            return claimsResolver.apply(claims);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public String generateToken(DomesUser domesUser, String issuer) {
@@ -47,7 +56,7 @@ public class JwtTokenService {
                 .setClaims(extraClaims)
                 .setSubject(domesUser.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5)) // ms, s, min
+                .setExpiration(new Date(System.currentTimeMillis() + 1000)) // ms, s, min 1000 * 60 * 5
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .setIssuer(issuer)
                 .compact();

@@ -1,15 +1,15 @@
 package fr.greta.domes_server.entities;
 
-public class AuthenticationToken {
+public class AuthenticationTokenResponse {
     private String access_token;
     private String refresh_token;
 
-    public AuthenticationToken (String access_token, String refresh_token) {
+    public AuthenticationTokenResponse(String access_token, String refresh_token) {
         this.access_token=access_token;
         this.refresh_token=refresh_token;
     }
 
-    public AuthenticationToken() {}
+    public AuthenticationTokenResponse() {}
 
     public String getAccess_token() {
         return access_token;
@@ -29,7 +29,7 @@ public class AuthenticationToken {
 
     @Override
     public String toString() {
-        return "AuthenticationToken{" +
+        return "AuthenticationTokenRequest{" +
                 "access_token='" + access_token + '\'' +
                 ", refresh_token='" + refresh_token + '\'' +
                 '}';
