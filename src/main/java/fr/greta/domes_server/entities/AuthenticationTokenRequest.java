@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationTokenRequest {
-    private String refreshToken;
     private String email;
+    private String refreshToken;
 }

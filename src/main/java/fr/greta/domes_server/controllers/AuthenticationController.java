@@ -70,16 +70,15 @@ public class AuthenticationController {
     @PostMapping("/employee/token/refresh")
     public ResponseEntity<AuthenticationTokenResponse> renewEmployeeAccessToken(@RequestBody AuthenticationTokenRequest authenticationTokenRequest) {
 
-        var emailFromRefreshToken = jwtTokenService.extractUsername(authenticationTokenRequest.getRefreshToken());
+        var emailFromRefreshToken = jwtTokenService.extractUsername(authenticationTokenRequest.getRefreshToken().substring("Bearer ".length()));
 
-        if (emailFromRefreshToken == null) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        if (emailFromRefreshToken == null) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         var employee = employeeRepository.findByEmail(authenticationTokenRequest.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        if (jwtTokenService.isTokenValid(authenticationTokenRequest.getRefreshToken(), employee)) {
+        if (jwtTokenService.isTokenValid(authenticationTokenRequest.getRefreshToken().substring("Bearer ".length()), employee)) {
             String issuer = request.getRequestURI();
+
             return new ResponseEntity<>(new AuthenticationTokenResponse(jwtTokenService.generateToken(employee, issuer), authenticationTokenRequest.getRefreshToken()), HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);

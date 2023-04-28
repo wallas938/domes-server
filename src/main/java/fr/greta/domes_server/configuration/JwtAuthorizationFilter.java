@@ -2,9 +2,7 @@ package fr.greta.domes_server.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.greta.domes_server.entities.DomesUser;
-import fr.greta.domes_server.repositories.ClientRepository;
 import fr.greta.domes_server.repositories.DomesUserRepository;
-import fr.greta.domes_server.repositories.EmployeeRepository;
 import fr.greta.domes_server.services.JwtTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,10 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static org.springframework.http.HttpHeaders.*;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -45,7 +41,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String emailFromAccessToken = null;
         if (authorizationHeader != null && authorizationHeader.startsWith(tokenPrefix)) {
             String access_token = authorizationHeader.substring(tokenPrefix.length()); // ey.....
-//            try {
 
             emailFromAccessToken = jwtTokenService.extractUsername(access_token);
             if (emailFromAccessToken != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -75,13 +70,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 error.put("error_message", "Token Expired or Not Valid");
                 error.put("status", String.valueOf(SC_UNAUTHORIZED));
                 new ObjectMapper().writeValue(response.getOutputStream(), error);
-//
-//                }
             }
-
-//            } catch (Exception e) {
-
         }
-//        }
     }
 }
