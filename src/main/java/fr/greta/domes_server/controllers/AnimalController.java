@@ -51,7 +51,6 @@ public class AnimalController {
     @PostMapping()
     @PreAuthorize("hasAuthority('ROLE_EMPLOYEE')")
     public ResponseEntity<String> postAnimal(@RequestBody @Valid AnimalCreateDto dto) {
-        System.out.println(dto);
         DomesResponse response = animalService.addAnimal(dto);
         if (response.getSuccess())
             return new ResponseEntity<>(response.getMessage(), HttpStatus.CREATED);

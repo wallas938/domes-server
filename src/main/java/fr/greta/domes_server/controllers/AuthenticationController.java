@@ -22,13 +22,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
-    private final DomesUserRepository domesUserRepository;
     private final ClientRepository clientRepository;
     private final EmployeeRepository employeeRepository;
 
     private final JwtTokenService jwtTokenService;
     private final HttpServletRequest request;
-    private final HttpServletResponse response;
+
 
     @PostMapping("/signup")
     public ResponseEntity<DomesResponse> signup(@RequestBody DomesUser domesUser) {
@@ -48,7 +47,7 @@ public class AuthenticationController {
 
         var user = employeeRepository.findByEmail(credentials.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new AuthenticationTokenResponse(jwtTokenService.generateToken(user, issuer), jwtTokenService.generateRefreshToken(user, issuer));
+        return new AuthenticationTokenResponse(jwtTokenService.generateToken(user, issuer), jwtTokenService.generateRefreshToken(user, issuer), HttpStatus.ACCEPTED.value());
     }
 
     @PostMapping("/client-authentication")
@@ -64,7 +63,7 @@ public class AuthenticationController {
 
         var user = clientRepository.findByEmail(credentials.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new ResponseEntity<>(new AuthenticationTokenResponse(jwtTokenService.generateToken(user, issuer), jwtTokenService.generateRefreshToken(user, issuer)), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new AuthenticationTokenResponse(jwtTokenService.generateToken(user, issuer), jwtTokenService.generateRefreshToken(user, issuer), HttpStatus.ACCEPTED.value()), HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/employee/token/refresh")
@@ -79,9 +78,11 @@ public class AuthenticationController {
         if (jwtTokenService.isTokenValid(authenticationTokenRequest.getRefreshToken().substring("Bearer ".length()), employee)) {
             String issuer = request.getRequestURI();
 
-            return new ResponseEntity<>(new AuthenticationTokenResponse(jwtTokenService.generateToken(employee, issuer), authenticationTokenRequest.getRefreshToken()), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(new AuthenticationTokenResponse(jwtTokenService.generateToken(employee, issuer),
+                    authenticationTokenRequest.getRefreshToken(), HttpStatus.ACCEPTED.value()), HttpStatus.ACCEPTED);
         }
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(new AuthenticationTokenResponse(null,
+                null, HttpStatus.ACCEPTED.value()),HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/client/token/refresh")
@@ -95,10 +96,14 @@ public class AuthenticationController {
 
             if (jwtTokenService.isTokenValid(authenticationTokenRequest.getRefreshToken(), client)) {
                 String issuer = request.getRequestURI();
-                return new ResponseEntity<>(new AuthenticationTokenResponse(jwtTokenService.generateToken(client, issuer), authenticationTokenRequest.getRefreshToken()), HttpStatus.ACCEPTED);
+                return new ResponseEntity<>(new AuthenticationTokenResponse(jwtTokenService.generateToken(client, issuer),
+                        authenticationTokenRequest.getRefreshToken(),
+                        HttpStatus.ACCEPTED.value()), HttpStatus.ACCEPTED);
             }
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new AuthenticationTokenResponse(null,
+                null, HttpStatus.ACCEPTED.value()),HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(new AuthenticationTokenResponse(null,
+                null, HttpStatus.ACCEPTED.value()),HttpStatus.FORBIDDEN);
     }
 }
