@@ -28,7 +28,7 @@ public class DomesUser implements UserDetails {
     private String lastname;
     @Column(length = 100)
     private String firstname;
-    @Column(length = 100)
+    @Column(length = 100, unique = true)
     private String email;
     @Column
     private String password;

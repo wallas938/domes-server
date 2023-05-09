@@ -4,6 +4,7 @@ import fr.greta.domes_server.dtos.animal.AnimalPage;
 import fr.greta.domes_server.dtos.client.ClientEditDTO;
 import fr.greta.domes_server.dtos.client.ClientGetDTO;
 import fr.greta.domes_server.dtos.client.ClientPage;
+import fr.greta.domes_server.dtos.client.ClientPostDTO;
 import fr.greta.domes_server.entities.DomesResponse;
 import fr.greta.domes_server.services.ClientService;
 import jakarta.servlet.http.HttpServletRequest;

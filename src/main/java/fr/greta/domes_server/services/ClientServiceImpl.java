@@ -1,8 +1,10 @@
 package fr.greta.domes_server.services;
 
+import fr.greta.domes_server.configuration.Role;
 import fr.greta.domes_server.dtos.client.ClientEditDTO;
 import fr.greta.domes_server.dtos.client.ClientGetDTO;
 import fr.greta.domes_server.dtos.client.ClientPage;
+import fr.greta.domes_server.dtos.client.ClientPostDTO;
 import fr.greta.domes_server.dtos.order.OrderGetDTO;
 import fr.greta.domes_server.entities.*;
 import fr.greta.domes_server.repositories.ClientRepository;
@@ -11,6 +13,7 @@ import fr.greta.domes_server.repositories.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +26,7 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
     private final OrderRepository orderRepository;
     private final DomesUserRepository domesUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public ClientPage getClients(String lastname, String firstname, String phoneNumber, String email, int pageNumber, int pageSize) {
@@ -74,6 +78,29 @@ public class ClientServiceImpl implements ClientService {
         }
     }
 
+    @Override
+    public Optional<ClientGetDTO> saveClient(ClientPostDTO clientPostDTO) {
+        Client client = new Client();
+        client.setRole(Role.ROLE_CLIENT);
+        client.setAddress(clientPostDTO.getAddress());
+        client.setEmail(clientPostDTO.getEmail());
+        client.setLastname(clientPostDTO.getLastname());
+        client.setFirstname(clientPostDTO.getFirstname());
+        client.setPhoneNumber(clientPostDTO.getPhoneNumber());
+        client.setPassword(passwordEncoder.encode(clientPostDTO.getPassword()));
+        Optional<Client> savedClient = Optional.of(clientRepository.save(client));
+        return savedClient.map(c -> {
+            ClientGetDTO clientGetDTO = new ClientGetDTO();
+            clientGetDTO.setId(c.getId());
+            clientGetDTO.setLastname(c.getLastname());
+            clientGetDTO.setFirstname(c.getFirstname());
+            clientGetDTO.setAddress(c.getAddress());
+            clientGetDTO.setEmail(c.getEmail());
+            clientGetDTO.setPhoneNumber(c.getPhoneNumber());
+
+            return Optional.of(clientGetDTO);
+        }).orElse(Optional.empty());
+    }
 
     private List<ClientGetDTO> generateListOfClientGetDTO(List<Client> clients) {
         return clients.stream().map(client -> {
