@@ -1,15 +1,21 @@
 package fr.greta.domes_server.controllers;
 
+import fr.greta.domes_server.dtos.animal.AnimalPage;
+import fr.greta.domes_server.dtos.client.ClientGetDTO;
+import fr.greta.domes_server.dtos.client.ClientPostDTO;
 import fr.greta.domes_server.entities.*;
 import fr.greta.domes_server.repositories.ClientRepository;
 import fr.greta.domes_server.repositories.DomesUserRepository;
 import fr.greta.domes_server.repositories.EmployeeRepository;
+import fr.greta.domes_server.services.ClientService;
 import fr.greta.domes_server.services.JwtTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,14 +30,22 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final ClientRepository clientRepository;
     private final EmployeeRepository employeeRepository;
+    private final ClientService clientService;
 
     private final JwtTokenService jwtTokenService;
     private final HttpServletRequest request;
 
 
     @PostMapping("/signup")
-    public ResponseEntity<DomesResponse> signup(@RequestBody DomesUser domesUser) {
-        return null;
+    public ResponseEntity<ClientGetDTO> saveClient(@RequestBody @Valid ClientPostDTO clientPostDTO) {
+        try {
+            ClientGetDTO clientGetDTO = clientService.saveClient(clientPostDTO).orElseThrow();
+
+            return new ResponseEntity<>(clientGetDTO, HttpStatus.CREATED);
+        } catch (Exception e) {
+            System.out.println("Server error: " + e.getMessage());
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/employee-authentication")
@@ -82,7 +96,7 @@ public class AuthenticationController {
                     authenticationTokenRequest.getRefreshToken(), HttpStatus.ACCEPTED.value()), HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(new AuthenticationTokenResponse(null,
-                null, HttpStatus.ACCEPTED.value()),HttpStatus.FORBIDDEN);
+                null, HttpStatus.ACCEPTED.value()), HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/client/token/refresh")
@@ -101,9 +115,9 @@ public class AuthenticationController {
                         HttpStatus.ACCEPTED.value()), HttpStatus.ACCEPTED);
             }
             return new ResponseEntity<>(new AuthenticationTokenResponse(null,
-                null, HttpStatus.ACCEPTED.value()),HttpStatus.FORBIDDEN);
+                    null, HttpStatus.ACCEPTED.value()), HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(new AuthenticationTokenResponse(null,
-                null, HttpStatus.ACCEPTED.value()),HttpStatus.FORBIDDEN);
+                null, HttpStatus.ACCEPTED.value()), HttpStatus.FORBIDDEN);
     }
 }
