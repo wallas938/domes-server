@@ -96,7 +96,7 @@ public class AuthenticationController {
                     authenticationTokenRequest.getRefreshToken(), HttpStatus.ACCEPTED.value()), HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(new AuthenticationTokenResponse(null,
-                null, HttpStatus.ACCEPTED.value()), HttpStatus.FORBIDDEN);
+                null, HttpStatus.FORBIDDEN.value()), HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/client/token/refresh")
@@ -115,9 +115,9 @@ public class AuthenticationController {
                         HttpStatus.ACCEPTED.value()), HttpStatus.ACCEPTED);
             }
             return new ResponseEntity<>(new AuthenticationTokenResponse(null,
-                    null, HttpStatus.ACCEPTED.value()), HttpStatus.FORBIDDEN);
+                    null, HttpStatus.FORBIDDEN.value()), HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(new AuthenticationTokenResponse(null,
-                null, HttpStatus.ACCEPTED.value()), HttpStatus.FORBIDDEN);
+                null, HttpStatus.FORBIDDEN.value()), HttpStatus.FORBIDDEN);
     }
 }
