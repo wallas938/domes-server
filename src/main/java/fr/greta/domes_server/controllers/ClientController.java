@@ -1,10 +1,9 @@
 package fr.greta.domes_server.controllers;
 
-import fr.greta.domes_server.dtos.animal.AnimalPage;
 import fr.greta.domes_server.dtos.client.ClientEditDTO;
 import fr.greta.domes_server.dtos.client.ClientGetDTO;
 import fr.greta.domes_server.dtos.client.ClientPage;
-import fr.greta.domes_server.dtos.client.ClientPostDTO;
+import fr.greta.domes_server.entities.AuthenticationTokenRequest;
 import fr.greta.domes_server.entities.DomesResponse;
 import fr.greta.domes_server.services.ClientService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @CrossOrigin
 @RestController
 @RequestMapping("api/clients")
@@ -21,6 +22,14 @@ import org.springframework.web.bind.annotation.*;
 public class ClientController {
 
     private final ClientService clientService;
+
+    @GetMapping(value = "/{email}")
+    public ResponseEntity<ClientGetDTO> getClient(@PathVariable String email, @RequestBody AuthenticationTokenRequest authenticationTokenRequest) {
+
+        Optional<ClientGetDTO> clientGetDTO = clientService.getClientByEmail(email);
+
+        return clientGetDTO.map(client -> new ResponseEntity<>(client, HttpStatus.ACCEPTED)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
 
     @GetMapping(value = "/init")
     public ResponseEntity<ClientPage> getClients(

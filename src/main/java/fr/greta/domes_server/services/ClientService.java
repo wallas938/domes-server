@@ -4,7 +4,6 @@ import fr.greta.domes_server.dtos.client.ClientEditDTO;
 import fr.greta.domes_server.dtos.client.ClientGetDTO;
 import fr.greta.domes_server.dtos.client.ClientPage;
 import fr.greta.domes_server.dtos.client.ClientPostDTO;
-import fr.greta.domes_server.entities.Client;
 import fr.greta.domes_server.entities.DomesResponse;
 import org.springframework.stereotype.Service;
 
@@ -17,4 +16,6 @@ public interface ClientService {
     DomesResponse editClient(ClientEditDTO dto);
 
     Optional<ClientGetDTO> saveClient(ClientPostDTO clientPostDTO);
+
+    Optional<ClientGetDTO> getClientByEmail(String clientId);
 }
