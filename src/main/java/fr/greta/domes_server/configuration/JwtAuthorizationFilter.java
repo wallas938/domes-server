@@ -39,9 +39,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String tokenPrefix = "Bearer ";
         String authorizationHeader = request.getHeader(AUTHORIZATION); // Bearer access_token
         String emailFromAccessToken = null;
+
         if (authorizationHeader != null && authorizationHeader.startsWith(tokenPrefix)) {
             String access_token = authorizationHeader.substring(tokenPrefix.length()); // ey.....
-
             emailFromAccessToken = jwtTokenService.extractUsername(access_token);
             if (emailFromAccessToken != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
@@ -71,6 +71,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 error.put("status", String.valueOf(SC_UNAUTHORIZED));
                 new ObjectMapper().writeValue(response.getOutputStream(), error);
             }
+        } else {
+            filterChain.doFilter(request, response);
         }
     }
 }
