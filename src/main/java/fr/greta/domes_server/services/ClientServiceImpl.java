@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -102,21 +103,34 @@ public class ClientServiceImpl implements ClientService {
         }).orElse(Optional.empty());
     }
 
+    @Override
+    public Optional<ClientGetDTO> getClientByEmail(String email) {
+        return clientRepository.findByEmail(email).map(client -> {
+            DomesUser domesUser = domesUserRepository.findByEmail(client.getEmail()).orElseThrow();
+            return convertClientDBIntoClientGetDTO(client, domesUser);
+        });
+    }
+
+
+    private ClientGetDTO convertClientDBIntoClientGetDTO(Client client, DomesUser domesUser) {
+        ClientGetDTO clientGetDTO = new ClientGetDTO();
+        clientGetDTO.setLastname(client.getLastname());
+        clientGetDTO.setFirstname(client.getFirstname());
+        clientGetDTO.setAddress(client.getAddress());
+        clientGetDTO.setPhoneNumber(client.getPhoneNumber());
+        clientGetDTO.setRegistrationDate(client.getRegistrationDate());
+        clientGetDTO.setEmail(client.getEmail());
+        clientGetDTO.setId(domesUser.getId());
+        Order lastOrder = orderRepository.findFirstByClientId(domesUser.getId());
+        if (lastOrder != null)
+            clientGetDTO.setLastOrder(generateOrderGetDTO(lastOrder));
+        return clientGetDTO;
+    }
+
     private List<ClientGetDTO> generateListOfClientGetDTO(List<Client> clients) {
         return clients.stream().map(client -> {
             DomesUser domesUser = domesUserRepository.findByEmail(client.getEmail()).get();
-            ClientGetDTO clientGetDTO = new ClientGetDTO();
-            clientGetDTO.setLastname(client.getLastname());
-            clientGetDTO.setFirstname(client.getFirstname());
-            clientGetDTO.setAddress(client.getAddress());
-            clientGetDTO.setPhoneNumber(client.getPhoneNumber());
-            clientGetDTO.setRegistrationDate(client.getRegistrationDate());
-            clientGetDTO.setEmail(client.getEmail());
-            clientGetDTO.setId(domesUser.getId());
-            Order lastOrder = orderRepository.findFirstByClientId(domesUser.getId());
-            if (lastOrder != null)
-                clientGetDTO.setLastOrder(generateOrderGetDTO(lastOrder));
-            return clientGetDTO;
+            return convertClientDBIntoClientGetDTO(client, domesUser);
         }).toList();
     }
 
