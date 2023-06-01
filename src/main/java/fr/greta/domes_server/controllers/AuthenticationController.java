@@ -37,15 +37,9 @@ public class AuthenticationController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<ClientGetDTO> saveClient(@RequestBody @Valid ClientPostDTO clientPostDTO) {
-        try {
-            ClientGetDTO clientGetDTO = clientService.saveClient(clientPostDTO).orElseThrow();
-
-            return new ResponseEntity<>(clientGetDTO, HttpStatus.CREATED);
-        } catch (Exception e) {
-            System.out.println("Server error: " + e.getMessage());
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<DomesResponse> saveClient(@RequestBody ClientPostDTO clientPostDTO) {
+        DomesResponse domesResponse = clientService.saveClient(clientPostDTO);
+        return new ResponseEntity<>(domesResponse, domesResponse.getCode());
     }
 
     @PostMapping("/employee-authentication")

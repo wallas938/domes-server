@@ -66,7 +66,7 @@ public class ClientController {
     @PutMapping(value = "/{clientId}")
     public ResponseEntity<String> editClient(@PathVariable String clientId, @RequestBody ClientEditDTO clientGetDTO) {
         DomesResponse result = clientService.editClient(clientGetDTO);
-        if (result.getSuccess()) {
+        if (result.getCode() == HttpStatus.ACCEPTED) {
             return new ResponseEntity<>(result.getMessage(), HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(result.getMessage(), HttpStatus.BAD_REQUEST);

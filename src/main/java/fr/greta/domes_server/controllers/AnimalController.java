@@ -52,10 +52,10 @@ public class AnimalController {
     @PreAuthorize("hasAuthority('ROLE_EMPLOYEE')")
     public ResponseEntity<String> postAnimal(@RequestBody @Valid AnimalCreateDto dto) {
         DomesResponse response = animalService.addAnimal(dto);
-        if (response.getSuccess())
-            return new ResponseEntity<>(response.getMessage(), HttpStatus.CREATED);
+        if (response.getCode() == HttpStatus.CREATED)
+            return new ResponseEntity<>("Animal Ajouté avec succes", response.getCode());
 
-        return new ResponseEntity<>(response.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Erreur", response.getCode());
     }
 
     @PutMapping(value = "{animalId}")
