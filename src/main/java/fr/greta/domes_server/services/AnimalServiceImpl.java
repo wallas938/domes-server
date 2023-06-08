@@ -13,6 +13,7 @@ import fr.greta.domes_server.repositories.SpecieRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -35,10 +36,10 @@ public class AnimalServiceImpl implements AnimalService {
             Specie specie = specieRepository.getSpeciesByName(animalCreateDto.getSpecie());
 
             if (category == null)
-                return new DomesResponse("Catégorie null", false);
+                return new DomesResponse(HttpStatus.BAD_REQUEST, null, "Catégorie introuvable");
 
             if (specie == null)
-                return new DomesResponse("Espece null", false);
+                return new DomesResponse(HttpStatus.BAD_REQUEST, null, "Espèce introuvable");
 
             Animal animal = new Animal();
             animal.setAge(animalCreateDto.getAge());
@@ -55,9 +56,9 @@ public class AnimalServiceImpl implements AnimalService {
 
             animalRepository.save(animal);
 
-            return new DomesResponse("Animal enregistré", true);
+            return new DomesResponse(HttpStatus.CREATED, null, "Produit enregistré avec succès");
         } catch (Exception e) {
-            return new DomesResponse("Erreur Serveur" + e.getMessage(), true);
+            return new DomesResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, e.getMessage());
         }
     }
 

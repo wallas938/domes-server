@@ -15,7 +15,7 @@ public interface ClientService {
     ClientPage searchBarGetClients(String lastname, String firstname, String phoneNumber, String email, int pageNumber, int pageSize);
     DomesResponse editClient(ClientEditDTO dto);
 
-    Optional<ClientGetDTO> saveClient(ClientPostDTO clientPostDTO);
+    DomesResponse saveClient(ClientPostDTO clientPostDTO);
 
     Optional<ClientGetDTO> getClientByEmail(String clientId);
 }

@@ -1,19 +1,18 @@
 package fr.greta.domes_server.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
+
+@EqualsAndHashCode(callSuper = true)
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DomesResponse extends Exception {
-    private Boolean success;
+    private HttpStatus code;
+    private Object payload;
+    private String message;
 
-    public DomesResponse(String message, Boolean success) {
-        super(message);
-        this.success = success;
-    }
-
-    @Override
-    public String getMessage() {
-        return super.getMessage();
-    }
-
-    public Boolean getSuccess() {
-        return success;
-    }
 }

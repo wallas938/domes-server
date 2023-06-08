@@ -13,12 +13,12 @@ import fr.greta.domes_server.repositories.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -73,14 +73,20 @@ public class ClientServiceImpl implements ClientService {
             optionalClient.get().setEmail(dto.getEmail().toLowerCase());
             optionalClient.get().setAddress(dto.getAddress());
             clientRepository.save(optionalClient.get());
-            return new DomesResponse("Client modifié avec succès", true);
+            return new DomesResponse(HttpStatus.ACCEPTED, null, "Client modifié avec succès");
         } catch (Exception e) {
-            return new DomesResponse("Un probleme est survenu lors de la modification du client", true);
+            return new DomesResponse(HttpStatus.BAD_REQUEST, null, "Client introuvable");
         }
     }
 
     @Override
-    public Optional<ClientGetDTO> saveClient(ClientPostDTO clientPostDTO) {
+    public DomesResponse saveClient(ClientPostDTO clientPostDTO) {
+
+        Optional<Client> isClientExist = clientRepository.findByEmail(clientPostDTO.getEmail());
+
+        if (isClientExist.isPresent())
+            return new DomesResponse(HttpStatus.CONFLICT, null, "Cette Email existe déja");
+
         Client client = new Client();
         client.setRole(Role.ROLE_CLIENT);
         client.setAddress(clientPostDTO.getAddress());
@@ -89,18 +95,18 @@ public class ClientServiceImpl implements ClientService {
         client.setFirstname(clientPostDTO.getFirstname());
         client.setPhoneNumber(clientPostDTO.getPhoneNumber());
         client.setPassword(passwordEncoder.encode(clientPostDTO.getPassword()));
-        Optional<Client> savedClient = Optional.of(clientRepository.save(client));
-        return savedClient.map(c -> {
-            ClientGetDTO clientGetDTO = new ClientGetDTO();
-            clientGetDTO.setId(c.getId());
-            clientGetDTO.setLastname(c.getLastname());
-            clientGetDTO.setFirstname(c.getFirstname());
-            clientGetDTO.setAddress(c.getAddress());
-            clientGetDTO.setEmail(c.getEmail());
-            clientGetDTO.setPhoneNumber(c.getPhoneNumber());
 
-            return Optional.of(clientGetDTO);
-        }).orElse(Optional.empty());
+        Optional<Client> savedClient = Optional.of(clientRepository.save(client));
+
+        ClientGetDTO clientGetDTO = new ClientGetDTO();
+        clientGetDTO.setId(savedClient.get().getId());
+        clientGetDTO.setLastname(savedClient.get().getLastname());
+        clientGetDTO.setFirstname(savedClient.get().getFirstname());
+        clientGetDTO.setAddress(savedClient.get().getAddress());
+        clientGetDTO.setEmail(savedClient.get().getEmail());
+        clientGetDTO.setPhoneNumber(savedClient.get().getPhoneNumber());
+
+        return new DomesResponse(HttpStatus.CREATED, savedClient, "Client enregistré avec succès");
     }
 
     @Override
