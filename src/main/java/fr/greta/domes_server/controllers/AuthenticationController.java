@@ -20,7 +20,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -35,9 +40,21 @@ public class AuthenticationController {
     private final JwtTokenService jwtTokenService;
     private final HttpServletRequest request;
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((err) -> {
+            //String error = ((FieldError) err).getField();
+            String message = err.getDefaultMessage();
+            errors.put("message", message);
+        });
+        return errors;
+    }
 
     @PostMapping("/signup")
-    public ResponseEntity<DomesResponse> saveClient(@RequestBody ClientPostDTO clientPostDTO) {
+    public ResponseEntity<DomesResponse> saveClient(@RequestBody @Valid ClientPostDTO clientPostDTO) {
         DomesResponse domesResponse = clientService.saveClient(clientPostDTO);
         return new ResponseEntity<>(domesResponse, domesResponse.getCode());
     }
