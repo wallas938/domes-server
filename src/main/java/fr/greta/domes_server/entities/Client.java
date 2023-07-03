@@ -20,13 +20,14 @@ public class Client extends DomesUser {
     private String phoneNumber;
     @Embedded
     private Address address;
-
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="client", fetch = FetchType.EAGER)
+    private Collection<Order> orders;
     public Client(String lastname, String firstname, String email, String password) {
         super(lastname, firstname, email, password);
     }
 
     @Override
     public String toString() {
-        return super.toString() + " Client(phoneNumber="+phoneNumber+" address="+address+")";
+        return super.toString() + " Client(phoneNumber="+phoneNumber+" address="+address+ "orders="+orders+")";
     }
 }
