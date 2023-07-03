@@ -1,5 +1,6 @@
 package fr.greta.domes_server.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fr.greta.domes_server.configuration.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

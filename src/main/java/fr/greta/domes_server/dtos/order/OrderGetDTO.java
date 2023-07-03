@@ -2,7 +2,7 @@ package fr.greta.domes_server.dtos.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fr.greta.domes_server.entities.Address;
-import fr.greta.domes_server.entities.Article;
+import fr.greta.domes_server.entities.Animal;
 import fr.greta.domes_server.entities.Client;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class OrderGetDTO {
     private UUID id;
-    private Collection<Article> articles;
+    private Collection<Animal> animals;
     private Address shippingAddress;
     private int numberOfArticles;
     private double total;

@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @Data
@@ -24,7 +25,7 @@ public class DomesServerApplication implements CommandLineRunner {
     private final SpecieRepository specieRepository;
     private final AnimalRepository animalRepository;
     private final ClientRepository clientRepository;
-    private final ArticleRepository articleRepository;
+//    private final ArticleRepository articleRepository;
     private final OrderRepository orderRepository;
     private final DomesUserRepository domesUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -35,6 +36,9 @@ public class DomesServerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        Client client = clientRepository.findById(UUID.fromString("f3d0a8a9-9e05-4e54-826c-d9e4cc25fd6c")).get();
+        System.out.println(client.getOrders().stream().findFirst().get());
+
 //        initClients();
 //        initAnimalsCategoriesAndSpecies();
 //        initArticlesAndOrders();
@@ -406,23 +410,18 @@ public class DomesServerApplication implements CommandLineRunner {
          * */
         Client client = clientRepository.findByFirstname("sissako");
         /*
-         * Implementation of three articles
+         * Fetching of three bought animal
          * */
 
-        Category chien = categoryRepository.getCategoryByName("CHIEN");
-        Specie shibaInu = specieRepository.getSpeciesByName("Shiba-inu");
-        Article article1 = new Article(250, shibaInu, chien);
-        Article savedArticle1 = articleRepository.save(article1);
+        Animal article1 = animalRepository.findById(UUID.fromString("3410a8c3-94fb-44ed-9355-cf966620fdb4")).get();
 
-        Category chat = categoryRepository.getCategoryByName("CHAT");
-        Specie abyssin = specieRepository.getSpeciesByName("Abyssin");
-        Article article2 = new Article(180, abyssin, chat);
-        Article savedArticle2 = articleRepository.save(article2);
+        Animal article2 = animalRepository.findById(UUID.fromString("a5cba356-2573-41b0-88b1-0f6214774133")).get();
 
-        Category reptile = categoryRepository.getCategoryByName("REPTILE");
-        Specie iguane = specieRepository.getSpeciesByName("Iguane");
-        Article article3 = new Article(350, iguane, reptile);
-        Article savedArticle3 = articleRepository.save(article3);
+        Animal article3 = animalRepository.findById(UUID.fromString("4fe3b5a4-18df-4173-b179-d828e25503d8")).get();
+
+        Animal article4 = animalRepository.findById(UUID.fromString("f7ecf846-40c9-4163-b71e-fa4a7a960a2b")).get();
+
+        Animal article5 = animalRepository.findById(UUID.fromString("8aed3092-b4e0-41d9-927a-eca74b2097b7")).get();
 
         /*
          * Implementing the saved order
@@ -432,9 +431,9 @@ public class DomesServerApplication implements CommandLineRunner {
          * Create order and persist it
          * */
         Order order = new Order();
-        order.setArticles(List.of(savedArticle1, savedArticle2, savedArticle3));
-        order.setNumberOfArticles(order.getArticles().size());
-        order.setTotal(savedArticle1.getPrice()+savedArticle2.getPrice()+savedArticle3.getPrice());
+        order.setAnimals(List.of(article1, article2, article3, article4, article5));
+        order.setNumberOfArticles(order.getAnimals().size());
+        order.setTotal(article1.getPrice()+article2.getPrice()+article3.getPrice()+article4.getPrice()+article5.getPrice());
         order.setShippingAddress(client.getAddress());
         order.setClient(client);
 
