@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface AnimalService {
     DomesResponse addAnimal(AnimalCreateDto animal);
-    AnimalPage getAnimalsBySize(int pageSize, int size);
+    AnimalPage getAnimalsBySize(int pageSize, int size, String specie);
     AnimalPage getAnimals(double minPrice, double maxPrice, int minAge, int maxAge, String categoryName, String specieName, int pageNumber, int pageSize);
     Animal editAnimal(AnimalEditDTO dto, String animalId);
 }

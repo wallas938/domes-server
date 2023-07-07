@@ -49,6 +49,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         ahr -> ahr.requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/animals/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/species/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
                                 .anyRequest().authenticated()
                                 .and()
                                 .authenticationProvider(authenticationProvider())

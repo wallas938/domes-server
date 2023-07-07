@@ -19,16 +19,16 @@ public class SpecieController {
     @GetMapping
     public ResponseEntity<List<Specie>> getSpecies() {
         List<Specie> species = (List<Specie>) specieService.getAll();
-        System.out.println(species);
         if(species != null) {
             return new ResponseEntity<>(species, HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping(value = "categoryId")
-    public ResponseEntity<List<Specie>> getSpeciesByCategoryId(@RequestParam("categoryId") String categoryId) {
+    @GetMapping(value = "{categoryId}")
+    public ResponseEntity<List<Specie>> getSpeciesByCategoryId(@PathVariable("categoryId") String categoryId) {
         List<Specie> species = (List<Specie>) specieService.getSpeciesByCategory(categoryId);
+        System.out.println(species);
         if(species != null) {
             return new ResponseEntity<>(species, HttpStatus.ACCEPTED);
         }
