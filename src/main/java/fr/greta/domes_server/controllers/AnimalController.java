@@ -25,14 +25,14 @@ public class AnimalController {
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "15") int pageSize,
             @RequestParam(defaultValue = "50") double minPrice,
-            @RequestParam(defaultValue = "9999") double maxPrice,
+            @RequestParam(defaultValue = "999") double maxPrice,
             @RequestParam(defaultValue = "1") int minAge,
             @RequestParam(defaultValue = "24") int maxAge,
             @RequestParam(defaultValue = "%") String categoryName,
             @RequestParam(defaultValue = "%") String specieName) {
-//        System.out.println(String.format("/search: minPrice:%s - maxPrice=%s - minAge=%s - maxAge=%s - categoryName=%s - specieName=%s - pageNumber=%s - pageSize=%s" , minPrice, maxPrice, minAge, maxAge, categoryName, specieName, pageNumber, pageSize));
+        System.out.println(String.format("/search: minPrice:%s - maxPrice=%s - minAge=%s - maxAge=%s - categoryName=%s - specieName=%s - pageNumber=%s - pageSize=%s" , minPrice, maxPrice, minAge, maxAge, categoryName, specieName, pageNumber, pageSize));
         AnimalPage animalPage = animalService.getAnimals(minPrice, maxPrice, minAge, maxAge, categoryName, specieName, pageNumber, pageSize);
-
+//        System.out.println(categoryName);
         if (animalPage != null) {
             return new ResponseEntity<>(animalPage, HttpStatus.ACCEPTED);
         }
@@ -40,8 +40,9 @@ public class AnimalController {
     }
 
     @GetMapping()
-    public ResponseEntity<AnimalPage> getAnimalsBySize(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "15") int pageSize) {
-        AnimalPage animalPage = animalService.getAnimalsBySize(pageNumber, pageSize);
+    public ResponseEntity<AnimalPage> getAnimalsBySize(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "15") int pageSize, @RequestParam(defaultValue = "%") String specieName) {
+        System.out.println(String.format("specieName=%s - pageNumber=%s - pageSize=%s" ,specieName, pageNumber, pageSize));
+        AnimalPage animalPage = animalService.getAnimalsBySize(pageNumber, pageSize, specieName);
         if (animalPage != null) {
             return new ResponseEntity<>(animalPage, HttpStatus.ACCEPTED);
         }
@@ -60,7 +61,7 @@ public class AnimalController {
 
     @PutMapping(value = "{animalId}")
     @PreAuthorize("hasAuthority('ROLE_EMPLOYEE')")
-    public ResponseEntity<Animal> postAnimal(@RequestBody @Valid AnimalEditDTO dto, @PathVariable String animalId) {
+    public ResponseEntity<Animal> editAnimal(@RequestBody @Valid AnimalEditDTO dto, @PathVariable String animalId) {
 
         Animal animal = animalService.editAnimal(dto, animalId);
 

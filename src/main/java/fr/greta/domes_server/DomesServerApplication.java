@@ -25,7 +25,7 @@ public class DomesServerApplication implements CommandLineRunner {
     private final SpecieRepository specieRepository;
     private final AnimalRepository animalRepository;
     private final ClientRepository clientRepository;
-//    private final ArticleRepository articleRepository;
+    //    private final ArticleRepository articleRepository;
     private final OrderRepository orderRepository;
     private final DomesUserRepository domesUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -36,9 +36,6 @@ public class DomesServerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        Client client = clientRepository.findById(UUID.fromString("f3d0a8a9-9e05-4e54-826c-d9e4cc25fd6c")).get();
-        System.out.println(client.getOrders().stream().findFirst().get());
-
 //        initClients();
 //        initAnimalsCategoriesAndSpecies();
 //        initArticlesAndOrders();
@@ -70,12 +67,6 @@ public class DomesServerApplication implements CommandLineRunner {
         domesUserRepository.findByEmail(client.getEmail()).ifPresentOrElse(domesUser -> System.out.println(domesUser.getFirstname() + "Existe déja"), () -> domesUserRepository.save(client));
 
         domesUserRepository.findByEmail(employee.getEmail()).ifPresentOrElse(domesUser -> System.out.println(domesUser.getFirstname() + "Existe déja"), () -> domesUserRepository.save(employee));
-
-        //        clientRepository.save(domesUser);
-//        clientRepository.save(new DomesUser("goita", "asimi", "0741893026", "asimi@email.fr", new Address("france", "paris", "6 avenue des marchands de sable", "59130"), encoder.encode("asimi")));
-//        clientRepository.save(new DomesUser("jakarta", "ariful", "0648799935", "ariful@email.fr", new Address("france", "bordeaux", "32 rue du chemin des vivants", "33000"), encoder.encode("ariful")));
-//        clientRepository.save(new DomesUser("petit", "jessie", "0713416885", "jessie@email.fr", new Address("france", "lyon", "71 boulevard du zenith", "69001"), encoder.encode("jessie")));
-//        clientRepository.save(new DomesUser("simo", "philippe", "0698633846", "philippe@email.fr", new Address("france", "marseille", "10 place du zinedine zidane", "13007"), encoder.encode("philippe")));
     }
 
     private void initAnimalsCategoriesAndSpecies() {
@@ -273,8 +264,6 @@ public class DomesServerApplication implements CommandLineRunner {
         saveAnimal(dog, dalmatien);
 
 
-
-
         saveAnimal(cat, americanCurl);
 
         saveAnimal(cat, abyssin);
@@ -382,14 +371,14 @@ public class DomesServerApplication implements CommandLineRunner {
 
     public void saveAnimal(Category category, Specie specie) {
         int randomAge = 1 + (int) (Math.random() * ((24 - 1) + 1));
-        int randomPrice = 1 + (int)(Math.random() * (999 - 1) + 1);
+        int randomPrice = 1 + (int) (Math.random() * (999 - 1) + 1);
 
         while (randomAge < 1 || randomAge > 24) {
             randomAge = 1 + (int) (Math.random() * ((24 - 1) + 1));
         }
 
         while (randomPrice < 50 || randomPrice > 999) {
-            randomPrice = 1 + (int)(Math.random() * (999 - 1) + 1);
+            randomPrice = 1 + (int) (Math.random() * (999 - 1) + 1);
         }
 
         Animal animal = new Animal();
@@ -400,6 +389,17 @@ public class DomesServerApplication implements CommandLineRunner {
         animal.setPrice(randomPrice);
         animal.setSold(false);
         animal.setDescription(category.getName() + "/" + specie.getName() + "/" + animal.getAge() + " months");
+
+        if (category.getName().equals("CHIEN"))
+            animal.setMainPicture("https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg");
+        else if (category.getName().equals("CHAT"))
+            animal.setMainPicture("https://static5.depositphotos.com/1000270/486/i/600/depositphotos_4869272-stock-photo-bengal-cat-light-brown-cream.jpg");
+        else if (category.getName().equals("OISEAU"))
+            animal.setMainPicture("https://www.rspb.org.uk/globalassets/images/birds-and-wildlife/bird-species-illustrations/serin_male_1200x675.jpg?preset=largelandscape_mobile");
+        else if (category.getName().equals("POISSON"))
+            animal.setMainPicture("https://stylesatlife.com/wp-content/uploads/2019/10/Types-of-Fish-Species-In-World-and-Their-Facts.jpg");
+        else if (category.getName().equals("REPTILE"))
+            animal.setMainPicture("https://st.depositphotos.com/1361307/2948/i/600/depositphotos_29480431-stock-photo-bearded-dragon.jpg");
 
         animalRepository.save(animal);
     }
@@ -433,7 +433,7 @@ public class DomesServerApplication implements CommandLineRunner {
         Order order = new Order();
         order.setAnimals(List.of(article1, article2, article3, article4, article5));
         order.setNumberOfArticles(order.getAnimals().size());
-        order.setTotal(article1.getPrice()+article2.getPrice()+article3.getPrice()+article4.getPrice()+article5.getPrice());
+        order.setTotal(article1.getPrice() + article2.getPrice() + article3.getPrice() + article4.getPrice() + article5.getPrice());
         order.setShippingAddress(client.getAddress());
         order.setClient(client);
 

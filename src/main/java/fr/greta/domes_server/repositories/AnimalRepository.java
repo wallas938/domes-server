@@ -24,4 +24,11 @@ public interface AnimalRepository extends JpaRepository<Animal, UUID> {
             @Param("categoryName") String categoryName,
             @Param("specieName") String specieName,
             Pageable pageable);
+
+    @Query("SELECT a " +
+            "FROM Animal a " +
+            "WHERE a.specie.name LIKE :specieName")
+    Page<Animal> findAnimalBySpecieNameEquals(
+            @Param("specieName") String specieName,
+            Pageable pageable);
 }

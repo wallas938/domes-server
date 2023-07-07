@@ -63,9 +63,9 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public AnimalPage getAnimalsBySize(int pageNumber, int pageSize) {
+    public AnimalPage getAnimalsBySize(int pageNumber, int pageSize, String specieName) {
         AnimalPage animalPage = new AnimalPage();
-        Page<Animal> content = animalRepository.findAll(PageRequest.of(pageNumber, pageSize));
+        Page<Animal> content = animalRepository.findAnimalBySpecieNameEquals(specieName, PageRequest.of(pageNumber, pageSize));
         animalPage.setAnimals(content.getContent());
         animalPage.setTotalPages(content.getTotalPages());
         animalPage.setTotalElements(content.getNumberOfElements());
