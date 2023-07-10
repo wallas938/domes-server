@@ -44,6 +44,9 @@ public class Animal {
     private int age;
     @Column
     private boolean sold;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
     @Column
     @Temporal(TemporalType.DATE)
     private LocalDate registrationDate = LocalDate.now();

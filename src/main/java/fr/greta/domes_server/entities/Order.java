@@ -18,9 +18,9 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @OneToMany(fetch = FetchType.EAGER)
-    private Collection<Animal> animals;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order")
+    private Collection<Animal> cart;
+    @ManyToOne(fetch = FetchType.EAGER)
     private Client client;
     @Embedded
     private Address shippingAddress;
@@ -32,8 +32,8 @@ public class Order {
     @Temporal(TemporalType.DATE)
     private LocalDate purchaseDate = LocalDate.now();
 
-    public Order(Collection<Animal> animals, Client client, Address shippingAddress, int numberOfArticles, double total, LocalDate purchaseDate) {
-        this.animals = animals;
+    public Order(Collection<Animal> cart, Client client, Address shippingAddress, int numberOfArticles, double total, LocalDate purchaseDate) {
+        this.cart = cart;
         this.client = client;
         this.shippingAddress = shippingAddress;
         this.numberOfArticles = numberOfArticles;
@@ -43,6 +43,6 @@ public class Order {
 
     @Override
     public String toString() {
-        return super.toString() + " Order(id="+id+" animals="+animals+ "numberOfArticles="+numberOfArticles+"total="+total+")";
+        return super.toString() + " Order(id="+id+" cart="+cart+ "numberOfArticles="+numberOfArticles+"total="+total+")";
     }
 }

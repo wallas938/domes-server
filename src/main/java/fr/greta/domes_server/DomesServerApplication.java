@@ -431,8 +431,8 @@ public class DomesServerApplication implements CommandLineRunner {
          * Create order and persist it
          * */
         Order order = new Order();
-        order.setAnimals(List.of(article1, article2, article3, article4, article5));
-        order.setNumberOfArticles(order.getAnimals().size());
+        order.setCart(List.of(article1, article2, article3, article4, article5));
+        order.setNumberOfArticles(order.getCart().size());
         order.setTotal(article1.getPrice() + article2.getPrice() + article3.getPrice() + article4.getPrice() + article5.getPrice());
         order.setShippingAddress(client.getAddress());
         order.setClient(client);

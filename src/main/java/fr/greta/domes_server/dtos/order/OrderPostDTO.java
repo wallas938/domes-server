@@ -1,10 +1,8 @@
 package fr.greta.domes_server.dtos.order;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fr.greta.domes_server.entities.Address;
 import fr.greta.domes_server.entities.Animal;
 import fr.greta.domes_server.entities.Client;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,11 +16,10 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderGetDTO {
-    private UUID id;
+public class OrderPostDTO {
     private Collection<Animal> cart;
     private Address shippingAddress;
     private int numberOfArticles;
     private double total;
-    private LocalDate purchaseDate = LocalDate.now();
+    private Client client;
 }

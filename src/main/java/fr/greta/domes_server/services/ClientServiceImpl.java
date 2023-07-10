@@ -142,7 +142,7 @@ public class ClientServiceImpl implements ClientService {
 
     private OrderGetDTO generateOrderGetDTO(Order order) {
         OrderGetDTO orderGetDTO = new OrderGetDTO();
-        orderGetDTO.setAnimals(order.getAnimals());
+        orderGetDTO.setCart(order.getCart());
         orderGetDTO.setTotal(order.getTotal());
         orderGetDTO.setId(order.getId());
         orderGetDTO.setPurchaseDate(order.getPurchaseDate());

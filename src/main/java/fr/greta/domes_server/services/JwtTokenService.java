@@ -56,7 +56,7 @@ public class JwtTokenService {
                 .setClaims(extraClaims)
                 .setSubject(domesUser.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15)) // 15 min
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60)) // 1 jour
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .setIssuer(issuer)
                 .compact();
