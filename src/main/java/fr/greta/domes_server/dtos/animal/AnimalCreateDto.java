@@ -16,10 +16,8 @@ public class AnimalCreateDto {
     private String category;
     @NotNull(message = "Ajouter une espèce")
     private String specie;
-    @NotNull(message = "Prix invalide...")
     @DecimalMin(value = "50.00", message = "Le prix doit être superieur ou egale à 50.00 Euro")
     private double price;
-    @NotNull(message = "Age invalide...")
     @Min(value = 1, message = "L'age doit être superieur ou égale a 1 ")
     private int age;
     @Nullable

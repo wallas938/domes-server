@@ -51,10 +51,6 @@ public class OrderServiceImpl implements OrderService {
 
             Order saved = orderRepository.save(order);
 
-            animals.forEach(animal -> {
-                animal.setOrder(saved);
-            });
-
             OrderGetDTO orderGetDTO = new OrderGetDTO();
 
 
