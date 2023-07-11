@@ -30,17 +30,12 @@ public class AnimalServiceImpl implements AnimalService {
     @Override
     public DomesResponse addAnimal(AnimalCreateDto animalCreateDto) {
         try {
-
             Category category = categoryRepository.getCategoryByName(animalCreateDto.getCategory());
-
             Specie specie = specieRepository.getSpeciesByName(animalCreateDto.getSpecie());
-
             if (category == null)
                 return new DomesResponse(HttpStatus.BAD_REQUEST, null, "Catégorie introuvable");
-
             if (specie == null)
                 return new DomesResponse(HttpStatus.BAD_REQUEST, null, "Espèce introuvable");
-
             Animal animal = new Animal();
             animal.setAge(animalCreateDto.getAge());
             animal.setPrice(animalCreateDto.getPrice());
@@ -53,9 +48,7 @@ public class AnimalServiceImpl implements AnimalService {
             animal.setFourthPicture(animalCreateDto.getFourthPicture());
             animal.setDescription(animalCreateDto.getDescription());
             animal.setSold(false);
-
             animalRepository.save(animal);
-
             return new DomesResponse(HttpStatus.CREATED, null, "Produit enregistré avec succès");
         } catch (Exception e) {
             return new DomesResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, e.getMessage());

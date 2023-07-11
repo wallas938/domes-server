@@ -30,10 +30,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (request.getServletPath().contains("/api/auth") ||
-                request.getServletPath().contains("/token/refresh")) {
+                request.getServletPath().contains("/token/refresh") ||
+                (request.getMethod().equals("GET") && request.getServletPath().contains("/api/animals")) ||
+                (request.getMethod().equals("GET") && request.getServletPath().contains("/api/species")) ||
+                (request.getMethod().equals("GET") && request.getServletPath().contains("/api/categories"))) {
             filterChain.doFilter(request, response);
             return;
         }
+
         DomesUser domesUser = null;
         JwtTokenService jwtTokenService = new JwtTokenService();
         String tokenPrefix = "Bearer ";
